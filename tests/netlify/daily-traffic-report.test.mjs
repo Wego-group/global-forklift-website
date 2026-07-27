@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { aggregateTraffic, buildDailyReport } from "./daily-traffic-report.mjs";
+import { aggregateTraffic, buildDailyReport } from "../../netlify/functions/daily-traffic-report.mjs";
 
 test("aggregates page views, visitors, pages, countries, and languages", () => {
   const report = aggregateTraffic([

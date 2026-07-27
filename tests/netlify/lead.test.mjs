@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { handler } from "./lead.mjs";
+import { handler } from "../../netlify/functions/lead.mjs";
 
 const validLead = {
   name: "Test Buyer",
