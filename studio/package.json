@@ -1,0 +1,15 @@
+{
+  "name": "wego-forklift-news-studio",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "sanity start",
+    "deploy": "sanity deploy"
+  },
+  "dependencies": {
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "sanity": "^4.0.0",
+    "styled-components": "^6.4.4"
+  }
+}

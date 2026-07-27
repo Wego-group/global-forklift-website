@@ -1,5 +1,4 @@
 ---
-import { getCollection } from "astro:content";
 import { Newspaper } from "lucide-astro";
 import Layout from "@layouts/Layout.astro";
 import LeadForm from "@components/LeadForm.astro";
@@ -9,15 +8,14 @@ import { categories } from "@data/products";
 import { siteConfig } from "@data/site";
 import { languagePath } from "@lib/seo";
 import { organizationSchema, websiteSchema } from "@lib/seo";
+import { getNewsArticles, getNewsForLanguage } from "@lib/news";
 
 export async function getStaticPaths() {
   return languages.map((language) => ({ params: { lang: language.code } }));
 }
 
 const lang = Astro.params.lang as Lang;
-const latestNews = (await getCollection("news"))
-  .sort((a, b) => new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime())
-  .slice(0, 3);
+const latestNews = getNewsForLanguage(await getNewsArticles(), lang).slice(0, 3);
 
 const schema = [organizationSchema(), websiteSchema(lang)];
 ---
@@ -79,19 +77,19 @@ const schema = [organizationSchema(), websiteSchema(lang)];
         <div class="section-heading">
           <span class="section-label"><Newspaper size={16} aria-hidden="true" /> News</span>
           <h2 class="section-title">Latest updates and technical articles</h2>
-          <p class="section-intro">The news area is set up for ongoing article publishing through the admin workspace.</p>
+          <p class="section-intro">Company updates, product guidance, technical notes, and practical export information from WEGO Forklift.</p>
         </div>
         <div class="grid three">
           {
             latestNews.map((article) => (
               <article class="card news-card">
-                <a class="card-media" href={languagePath(lang, `/news/${article.data.permalink}/`)}>
-                  <img src={article.data.cover} alt={article.data.title[lang]} width="1280" height="720" loading="lazy" />
+                <a class="card-media" href={languagePath(lang, `/news/${article.slug}/`)}>
+                  <img src={article.cover} alt={article.coverAlt} width="1280" height="720" loading="lazy" />
                 </a>
                 <div class="card-body">
-                  <p class="card-meta">{article.data.publishedAt.toISOString().slice(0, 10)}</p>
-                  <h3><a href={languagePath(lang, `/news/${article.data.permalink}/`)}>{article.data.title[lang]}</a></h3>
-                  <p>{article.data.excerpt[lang]}</p>
+                  <p class="card-meta">{article.publishedAt.slice(0, 10)}</p>
+                  <h3><a href={languagePath(lang, `/news/${article.slug}/`)}>{article.title}</a></h3>
+                  <p>{article.excerpt}</p>
                 </div>
               </article>
             ))

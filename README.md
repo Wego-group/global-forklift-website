@@ -14,6 +14,7 @@
 - 商品 feed：`/feeds/products.json`、`/feeds/google-merchant.csv`
 - 接口说明：`/api/status.json`、`/api/lead.schema.json`
 - 默认 `noindex` 保护，避免空内容被 Google 提前收录
+- Sanity News 后台：业务员可在独立后台新建、编辑、下线或删除新闻，无需 GitHub
 
 ## 本地运行
 
@@ -40,6 +41,7 @@ npm run preview
 7. 由 Boss 在 WxPusher 获取个人 SPT，并仅在 Netlify 环境变量中设置 `WXPUSHER_SPT`。网站会把实时询盘和北京时间每天 09:10 的前一日 PV/UV 汇总推送到该 SPT 对应的账号。
 8. `LEAD_WEBHOOK_URL` 仅作为未配置 WxPusher 时的旧接口兼容项。配置 `WXPUSHER_SPT` 后，询盘只走 Boss 的 WxPusher，不再调用旧 webhook。
 9. 内容真实完整后，把 `PUBLIC_ALLOW_INDEXING=true`，再提交 Google Search Console。
+10. News 编辑后台位于 `studio/`。首次部署后，运营人员在 Sanity Studio 发布新闻；每一篇语言版本使用同一个 `Translation group ID`。
 
 ## 低成本部署建议
 
