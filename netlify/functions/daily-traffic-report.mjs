@@ -1,5 +1,5 @@
 import { getStore } from "@netlify/blobs";
-import { escapeHtml, sendWxPusher } from "./_shared/wxpusher.mjs";
+import { escapeHtml, sendWxPusher } from "../lib/wxpusher.mjs";
 
 function chinaDate(date) {
   return new Intl.DateTimeFormat("en-CA", {

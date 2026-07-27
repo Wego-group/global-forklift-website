@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { escapeHtml, sendWxPusher } from "./_shared/wxpusher.mjs";
+import { escapeHtml, sendWxPusher } from "../lib/wxpusher.mjs";
 
 const REQUEST_TIMEOUT_MS = 8_000;
 
