@@ -1,5 +1,5 @@
 const WXPUSHER_ENDPOINT = "https://wxpusher.zjiecode.com/api/send/message/simple-push";
-const REQUEST_TIMEOUT_MS = 8_000;
+const REQUEST_TIMEOUT_MS = 20_000;
 
 export function escapeHtml(value) {
   return String(value)
