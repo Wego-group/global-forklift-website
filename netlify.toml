@@ -57,6 +57,11 @@
   status = 200
 
 [[redirects]]
+  from = "/api/pageview"
+  to = "/.netlify/functions/track-pageview"
+  status = 200
+
+[[redirects]]
   from = "/:lang/parts-service/*"
   to = "/:lang/service/"
   status = 301

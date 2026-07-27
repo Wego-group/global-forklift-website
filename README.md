@@ -37,8 +37,9 @@ npm run preview
 4. 填写行业和资源内容：`src/data/content.ts`。
 5. 替换公司信息：`src/data/site.ts`。
 6. 如果要用 Google Merchant Center，先在 feed 中补真实价格、库存、图片和运费政策。
-7. 配置询盘路由：设置 `LEAD_WEBHOOK_URL`，可接 Zapier、Make、飞书、企业微信、HubSpot 或自建 CRM。
-8. 内容真实完整后，把 `PUBLIC_ALLOW_INDEXING=true`，再提交 Google Search Console。
+7. 由 Boss 在 WxPusher 获取个人 SPT，并仅在 Netlify 环境变量中设置 `WXPUSHER_SPT`。网站会把实时询盘和北京时间每天 09:10 的前一日 PV/UV 汇总推送到该 SPT 对应的账号。
+8. `LEAD_WEBHOOK_URL` 仅作为未配置 WxPusher 时的旧接口兼容项。配置 `WXPUSHER_SPT` 后，询盘只走 Boss 的 WxPusher，不再调用旧 webhook。
+9. 内容真实完整后，把 `PUBLIC_ALLOW_INDEXING=true`，再提交 Google Search Console。
 
 ## 低成本部署建议
 

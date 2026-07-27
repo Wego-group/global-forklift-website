@@ -3,6 +3,7 @@ import SEO from "@components/SEO.astro";
 import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
 import InquiryDock from "@components/InquiryDock.astro";
+import TrafficTracker from "@components/TrafficTracker.astro";
 import { languageMeta, type Lang } from "@data/languages";
 import "@styles/global.css";
 import "@styles/wego.css";
@@ -38,5 +39,6 @@ const effectiveNoindex = noindex === true || routeNoindex ? true : undefined;
     <slot />
     <Footer lang={lang} />
     <InquiryDock lang={lang} />
+    <TrafficTracker />
   </body>
 </html>
