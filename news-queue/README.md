@@ -18,12 +18,14 @@ Rules:
 5. `article.md` no longer needs `publishedAt` or `updatedAt`. The publisher writes both automatically from the folder date.
 6. The auto publisher ignores future packages, publishes due packages, moves success cases to `news-published/`, and moves invalid packages to `news-failed/`.
 7. The real page URL comes from `permalink`, not from the folder name.
+8. Every package must be written as people-first SEO content: one clear product/search topic, a practical lead paragraph, real application details, and no keyword stuffing.
+9. All eight languages in `title`, `excerpt`, `seoTitle`, `seoDescription`, and `body` must be genuinely localized. Do not copy the English text into the other language fields.
 
 Recommended workflow for the news operator:
 
 1. Create a new folder under `news-queue/` using the publish date as the folder name, for example `2026-08-08`.
 2. Put the text materials and images into that folder.
-3. Ask Codex to turn the materials into a valid `article.md` using the local template.
+3. Ask Codex to turn the materials into a valid `article.md` using the local template and to localize all eight language fields.
 4. Leave the folder in place. The publisher will release it automatically at `22:00` Beijing time on that date.
 
 Message to send to the Codex on the publishing computer:
@@ -38,6 +40,8 @@ Rule:
 4. Do not ask me for GitHub steps. You should process the package, publish it, commit it, and push it yourself.
 5. article.md must follow news-queue/_template/article.md.
 6. publishedAt and updatedAt are generated automatically from the folder name. Do not require me to write them manually.
+7. Every news package must be polished for Google-friendly, people-first SEO before publishing.
+8. Every language field must be localized. Do not repeat the English copy in the non-English fields.
 
 When I give you a folder in news-queue/, you must:
 1. Read the text and images in that folder.
