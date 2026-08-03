@@ -44,9 +44,10 @@ npm run preview
 10. 新闻运营流程使用 `news-queue/`。每个待发布新闻一个文件夹，文件夹名就是发布日期，格式必须为 `YYYY-MM-DD`。
 11. 每个新闻文件夹必须包含 `article.md`，封面图可放在同目录并写成 `cover: ./cover.jpg`。
 12. 所有新闻统一在北京时间 `22:00` 发布，`publishedAt` 和 `updatedAt` 由脚本自动生成，不需要人工填写。
-13. 在负责发布的那台电脑上，让 Codex 执行 `npm run publish:queued-news`，然后提交并推送到 `main`。
+13. `news-queue/` 中的每篇 `article.md` 必须完整填写 8 种语言字段，不能用英文直接重复覆盖其他语言；`seoTitle`、`seoDescription`、`excerpt`、`body` 都要随语言本地化。
 14. 新闻内容必须按 Google 搜索的“以用户为先”逻辑撰写：标题聚焦一个明确产品/场景关键词，前两段先回答买家最关心的问题，正文写真实应用、配置、维护和交付信息，避免关键词堆砌。
-15. `news-queue/` 中的每篇 `article.md` 必须完整填写 8 种语言字段，不能用英文直接重复覆盖其他语言；`seoTitle`、`seoDescription`、`excerpt`、`body` 都要随语言本地化。
+15. 电脑关机也能按时发布：GitHub Actions 会在每天北京时间 `22:05` 自动执行 `npm run publish:queued-news`，然后自动提交并推送到 `main`。
+16. 业务侧电脑只负责把 `news-queue/日期文件夹` 和素材推到 GitHub，不再承担到点发布动作。
 
 ## 低成本部署建议
 
@@ -69,6 +70,7 @@ npm run publish:queued-news
 - 扫描 `news-queue/` 下所有新闻包
 - 文件夹名必须是发布日期，格式为 `YYYY-MM-DD`
 - 所有新闻固定在北京时间 `22:00` 发布
+- GitHub Actions 会在每天北京时间 `22:05` 自动执行发布脚本，因此即使电脑关机也能按时发布
 - 成功后写入 `src/content/news/`，同时把新闻包移动到 `news-published/`
 - 校验失败则移动到 `news-failed/`
 - 文章在入队前就应完成 SEO 打磨和多语言本地化，而不是发布后再补

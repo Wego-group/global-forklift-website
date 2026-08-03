@@ -26,7 +26,7 @@ Recommended workflow for the news operator:
 1. Create a new folder under `news-queue/` using the publish date as the folder name, for example `2026-08-08`.
 2. Put the text materials and images into that folder.
 3. Ask Codex to turn the materials into a valid `article.md` using the local template and to localize all eight language fields.
-4. Leave the folder in place. The publisher will release it automatically at `22:00` Beijing time on that date.
+4. Commit and push the folder to `main`. GitHub Actions will run in the cloud and release it automatically shortly after `22:00` Beijing time on that date, even if all local computers are off.
 
 Message to send to the Codex on the publishing computer:
 
@@ -37,16 +37,16 @@ Rule:
 1. News source only comes from news-queue/.
 2. Each subfolder name is the publish date in YYYY-MM-DD format.
 3. All news must use the same fixed publish time: 22:00:00+08:00.
-4. Do not ask me for GitHub steps. You should process the package, publish it, commit it, and push it yourself.
+4. Do not ask me for GitHub steps. You should process the package, commit it, and push it yourself.
 5. article.md must follow news-queue/_template/article.md.
 6. publishedAt and updatedAt are generated automatically from the folder name. Do not require me to write them manually.
 7. Every news package must be polished for Google-friendly, people-first SEO before publishing.
 8. Every language field must be localized. Do not repeat the English copy in the non-English fields.
+9. Cloud publishing is handled by GitHub Actions after the folder is pushed to main. Do not depend on a local machine staying online until publish time.
 
 When I give you a folder in news-queue/, you must:
 1. Read the text and images in that folder.
 2. Create or update article.md in that folder.
-3. Run npm run publish:queued-news.
-4. If content is due, confirm it moved into src/content/news/ and public/images/news/.
-5. Commit and push to main.
+3. Commit and push to main.
+4. If I explicitly ask for an immediate manual release, then run npm run publish:queued-news, commit, and push the generated changes.
 ```
