@@ -23,8 +23,6 @@ const article = findNewsArticle(await getNewsArticles(), lang, Astro.params.slug
 if (!article) return Astro.redirect(languagePath(lang, "/news/"));
 
 const relatedProducts = article.relatedCategories.flatMap((category) => getCategoryProducts(category)).slice(0, 3);
-const articlePublishedAtJson = JSON.stringify(article.publishedAt);
-const newsIndexPathJson = JSON.stringify(languagePath(lang, "/news/"));
 const breadcrumbs = [
   { name: "Home", url: languagePath(lang, "/") },
   { name: "News", url: languagePath(lang, "/news/") },
@@ -79,12 +77,4 @@ const articleSchema = {
       </div>
     </section>
   </main>
-  <script is:inline>
-    (() => {
-      const publishedAt = Date.parse({articlePublishedAtJson});
-      if (!Number.isNaN(publishedAt) && publishedAt > Date.now()) {
-        window.location.replace({newsIndexPathJson});
-      }
-    })();
-  </script>
 </Layout>

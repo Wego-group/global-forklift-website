@@ -23,10 +23,10 @@ const articles = getNewsForLanguage(await getNewsArticles(), lang);
     </header>
     <section class="section">
       <div class="container">
-        <div class="news-list" data-news-feed>
+        <div class="news-list">
           {
             articles.map((article) => (
-              <article class="news-row" data-news-card data-published-at={article.publishedAt}>
+              <article class="news-row">
                 <a class="news-row-media" href={languagePath(lang, `/news/${article.slug}/`)}>
                   <img src={article.cover} alt={article.coverAlt} width="960" height="540" loading="lazy" />
                 </a>
@@ -43,15 +43,3 @@ const articles = getNewsForLanguage(await getNewsArticles(), lang);
     </section>
   </main>
 </Layout>
-<script is:inline>
-  document.querySelectorAll("[data-news-feed]").forEach((feed) => {
-    const now = Date.now();
-    const cards = Array.from(feed.querySelectorAll("[data-news-card]"));
-    cards.forEach((card) => {
-      const publishedAt = Date.parse(card.getAttribute("data-published-at") || "");
-      if (!Number.isNaN(publishedAt) && publishedAt > now) {
-        card.remove();
-      }
-    });
-  });
-</script>
