@@ -11,7 +11,7 @@ const contentRoot = path.join(projectRoot, "src", "content", "news");
 const publicNewsRoot = path.join(projectRoot, "public", "images", "news");
 const supportedLanguages = ["en", "es", "fr", "ja", "de", "pt", "ko", "ar"];
 const localizedKeys = ["title", "excerpt", "seoTitle", "seoDescription"];
-const fixedPublishTime = "10:00:00+08:00";
+const fixedPublishTime = "22:00:00+08:00";
 
 function parseFrontmatter(source) {
   const match = source.match(/^---\s*\n([\s\S]*?)\n---\s*(?:\n|$)/);

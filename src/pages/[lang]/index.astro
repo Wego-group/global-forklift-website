@@ -79,10 +79,10 @@ const schema = [organizationSchema(), websiteSchema(lang)];
           <h2 class="section-title">Latest updates and technical articles</h2>
           <p class="section-intro">Company updates, product guidance, technical notes, and practical export information from WEGO Forklift.</p>
         </div>
-        <div class="grid three">
+        <div class="grid three" data-news-feed>
           {
             latestNews.map((article) => (
-              <article class="card news-card">
+              <article class="card news-card" data-news-card data-published-at={article.publishedAt}>
                 <a class="card-media" href={languagePath(lang, `/news/${article.slug}/`)}>
                   <img src={article.cover} alt={article.coverAlt} width="1280" height="720" loading="lazy" />
                 </a>
@@ -126,6 +126,17 @@ const schema = [organizationSchema(), websiteSchema(lang)];
   </main>
 
   <script is:inline>
+    document.querySelectorAll("[data-news-feed]").forEach((feed) => {
+      const now = Date.now();
+      const cards = Array.from(feed.querySelectorAll("[data-news-card]"));
+      cards.forEach((card) => {
+        const publishedAt = Date.parse(card.getAttribute("data-published-at") || "");
+        if (!Number.isNaN(publishedAt) && publishedAt > now) {
+          card.remove();
+        }
+      });
+    });
+
     document.querySelectorAll("[data-home-hero]").forEach((hero) => {
       const slides = Array.from(hero.querySelectorAll("[data-slide]"));
       if (slides.length < 2) return;

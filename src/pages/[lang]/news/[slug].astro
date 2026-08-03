@@ -77,4 +77,12 @@ const articleSchema = {
       </div>
     </section>
   </main>
+  <script is:inline>
+    (() => {
+      const publishedAt = Date.parse("{article.publishedAt}");
+      if (!Number.isNaN(publishedAt) && publishedAt > Date.now()) {
+        window.location.replace("{languagePath(lang, "/news/")}");
+      }
+    })();
+  </script>
 </Layout>

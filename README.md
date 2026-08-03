@@ -43,7 +43,7 @@ npm run preview
 9. 内容真实完整后，把 `PUBLIC_ALLOW_INDEXING=true`，再提交 Google Search Console。
 10. 新闻运营流程使用 `news-queue/`。每个待发布新闻一个文件夹，文件夹名就是发布日期，格式必须为 `YYYY-MM-DD`。
 11. 每个新闻文件夹必须包含 `article.md`，封面图可放在同目录并写成 `cover: ./cover.jpg`。
-12. 所有新闻统一在北京时间 `10:00` 发布，`publishedAt` 和 `updatedAt` 由脚本自动生成，不需要人工填写。
+12. 所有新闻统一在北京时间 `22:00` 发布，`publishedAt` 和 `updatedAt` 由脚本自动生成，不需要人工填写。
 13. 在负责发布的那台电脑上，让 Codex 执行 `npm run publish:queued-news`，然后提交并推送到 `main`。
 
 ## 低成本部署建议
@@ -66,7 +66,7 @@ npm run publish:queued-news
 
 - 扫描 `news-queue/` 下所有新闻包
 - 文件夹名必须是发布日期，格式为 `YYYY-MM-DD`
-- 所有新闻固定在北京时间 `10:00` 发布
+- 所有新闻固定在北京时间 `22:00` 发布
 - 成功后写入 `src/content/news/`，同时把新闻包移动到 `news-published/`
 - 校验失败则移动到 `news-failed/`
 
