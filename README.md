@@ -41,8 +41,10 @@ npm run preview
 7. 由 Boss 在 WxPusher 获取个人 SPT，并仅在 Netlify 环境变量中设置 `WXPUSHER_SPT`。网站会把实时询盘和北京时间每天 09:10 的前一日 PV/UV 汇总推送到该 SPT 对应的账号。
 8. `LEAD_WEBHOOK_URL` 仅作为未配置 WxPusher 时的旧接口兼容项。配置 `WXPUSHER_SPT` 后，询盘只走 Boss 的 WxPusher，不再调用旧 webhook。
 9. 内容真实完整后，把 `PUBLIC_ALLOW_INDEXING=true`，再提交 Google Search Console。
-10. 新闻运营流程使用 `news-queue/`。每个待发布新闻一个文件夹，必须包含 `article.md`，封面图可放在同目录并写成 `cover: ./cover.jpg`。
-11. 需要批量排期时，让 Codex 为多个新闻文件夹写入 `publishedAt`，然后由定时任务执行 `npm run publish:queued-news`。
+10. 新闻运营流程使用 `news-queue/`。每个待发布新闻一个文件夹，文件夹名就是发布日期，格式必须为 `YYYY-MM-DD`。
+11. 每个新闻文件夹必须包含 `article.md`，封面图可放在同目录并写成 `cover: ./cover.jpg`。
+12. 所有新闻统一在北京时间 `10:00` 发布，`publishedAt` 和 `updatedAt` 由脚本自动生成，不需要人工填写。
+13. 在负责发布的那台电脑上，让 Codex 执行 `npm run publish:queued-news`，然后提交并推送到 `main`。
 
 ## 低成本部署建议
 
@@ -63,6 +65,9 @@ npm run publish:queued-news
 规则：
 
 - 扫描 `news-queue/` 下所有新闻包
-- `publishedAt` 早于当前时间才会发布
+- 文件夹名必须是发布日期，格式为 `YYYY-MM-DD`
+- 所有新闻固定在北京时间 `10:00` 发布
 - 成功后写入 `src/content/news/`，同时把新闻包移动到 `news-published/`
 - 校验失败则移动到 `news-failed/`
+
+给另一台发布电脑上的 Codex 的固定指令，已经写在 [news-queue/README.md](/Users/mike_cheng/Desktop/global-forklift-website/news-queue/README.md)。

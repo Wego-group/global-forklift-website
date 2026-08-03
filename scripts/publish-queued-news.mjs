@@ -11,6 +11,7 @@ const contentRoot = path.join(projectRoot, "src", "content", "news");
 const publicNewsRoot = path.join(projectRoot, "public", "images", "news");
 const supportedLanguages = ["en", "es", "fr", "ja", "de", "pt", "ko", "ar"];
 const localizedKeys = ["title", "excerpt", "seoTitle", "seoDescription"];
+const fixedPublishTime = "10:00:00+08:00";
 
 function parseFrontmatter(source) {
   const match = source.match(/^---\s*\n([\s\S]*?)\n---\s*(?:\n|$)/);
@@ -50,6 +51,18 @@ function ensureBody(value) {
 
 function sanitizeFileSegment(value) {
   return value.toLowerCase().replace(/[^a-z0-9.-]+/g, "-").replace(/^-+|-+$/g, "");
+}
+
+function publishDateFromFolderName(packageName) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(packageName)) {
+    throw new Error('Folder name must be the publish date in "YYYY-MM-DD" format.');
+  }
+
+  const publishAt = new Date(`${packageName}T${fixedPublishTime}`);
+  if (Number.isNaN(publishAt.getTime())) {
+    throw new Error(`Folder date "${packageName}" is invalid.`);
+  }
+  return publishAt;
 }
 
 async function ensureDirectories() {
@@ -127,17 +140,13 @@ async function publishPackage(packageName) {
   }
   ensureBody(article.body);
 
-  const publishAt = new Date(article.publishedAt);
-  if (Number.isNaN(publishAt.getTime())) {
-    throw new Error('Field "publishedAt" must be a valid datetime or date.');
-  }
+  const publishAt = publishDateFromFolderName(packageName);
   if (publishAt.getTime() > Date.now()) {
     return { status: "pending" };
   }
 
-  const updatedAt = article.updatedAt ? new Date(article.updatedAt) : publishAt;
   article.publishedAt = publishAt.toISOString();
-  article.updatedAt = Number.isNaN(updatedAt.getTime()) ? publishAt.toISOString() : updatedAt.toISOString();
+  article.updatedAt = publishAt.toISOString();
   article.relatedCategories = Array.isArray(article.relatedCategories) ? article.relatedCategories : [];
   article.featured = Boolean(article.featured);
   article.cover = await copyCoverIfNeeded(packageDir, article.permalink, article.cover);

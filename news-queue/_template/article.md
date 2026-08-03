@@ -3,8 +3,6 @@ translationKey: sample-news-key
 permalink: sample-news-slug
 category: news
 author: WEGO Sales Team
-publishedAt: 2026-08-08T10:00:00+08:00
-updatedAt: 2026-08-08T10:00:00+08:00
 cover: ./cover.jpg
 title:
   en: Sample English title
