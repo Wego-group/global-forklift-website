@@ -14,7 +14,7 @@
 - 商品 feed：`/feeds/products.json`、`/feeds/google-merchant.csv`
 - 接口说明：`/api/status.json`、`/api/lead.schema.json`
 - 默认 `noindex` 保护，避免空内容被 Google 提前收录
-- Sanity News 后台：业务员可在独立后台新建、编辑、下线或删除新闻，无需 GitHub
+- 本地新闻队列：业务员把材料放进 `news-queue/`，由 Codex 按设定时间发布到网站
 
 ## 本地运行
 
@@ -41,7 +41,8 @@ npm run preview
 7. 由 Boss 在 WxPusher 获取个人 SPT，并仅在 Netlify 环境变量中设置 `WXPUSHER_SPT`。网站会把实时询盘和北京时间每天 09:10 的前一日 PV/UV 汇总推送到该 SPT 对应的账号。
 8. `LEAD_WEBHOOK_URL` 仅作为未配置 WxPusher 时的旧接口兼容项。配置 `WXPUSHER_SPT` 后，询盘只走 Boss 的 WxPusher，不再调用旧 webhook。
 9. 内容真实完整后，把 `PUBLIC_ALLOW_INDEXING=true`，再提交 Google Search Console。
-10. News 编辑后台位于 `studio/`。首次部署后，运营人员在 Sanity Studio 发布新闻；每一篇语言版本使用同一个 `Translation group ID`。
+10. 新闻运营流程使用 `news-queue/`。每个待发布新闻一个文件夹，必须包含 `article.md`，封面图可放在同目录并写成 `cover: ./cover.jpg`。
+11. 需要批量排期时，让 Codex 为多个新闻文件夹写入 `publishedAt`，然后由定时任务执行 `npm run publish:queued-news`。
 
 ## 低成本部署建议
 
@@ -52,3 +53,16 @@ npm run preview
 ## Google 推广注意
 
 不要在占位内容状态下开放索引。先补齐真实型号、参数、图片、证书、FAQ、交付条款、隐私政策，再开启 `PUBLIC_ALLOW_INDEXING=true`。
+
+## 新闻自动发布
+
+```bash
+npm run publish:queued-news
+```
+
+规则：
+
+- 扫描 `news-queue/` 下所有新闻包
+- `publishedAt` 早于当前时间才会发布
+- 成功后写入 `src/content/news/`，同时把新闻包移动到 `news-published/`
+- 校验失败则移动到 `news-failed/`

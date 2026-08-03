@@ -9,14 +9,12 @@
     "test": "node --test tests/netlify/*.test.mjs",
     "preview": "astro preview --host 0.0.0.0",
     "astro": "astro",
-    "seed:sanity-news": "node scripts/seed-sanity-news.mjs"
+    "publish:queued-news": "node scripts/publish-queued-news.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
     "@astrojs/sitemap": "^3.2.1",
     "@netlify/blobs": "^10.7.10",
-    "@portabletext/to-html": "^2.0.17",
-    "@sanity/client": "^7.25.0",
     "astro": "^5.11.0",
     "lucide-astro": "^0.468.0",
     "typescript": "^5.5.4",

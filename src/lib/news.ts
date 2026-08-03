@@ -1,40 +1,7 @@
 import { getCollection } from "astro:content";
-import { toHTML } from "@portabletext/to-html";
-import { createClient } from "@sanity/client";
 import type { Lang } from "@data/languages";
 
-const sanityProjectId = import.meta.env.PUBLIC_SANITY_PROJECT_ID || "oingo0yd";
-const sanityDataset = import.meta.env.PUBLIC_SANITY_DATASET || "production";
-const sanityApiVersion = import.meta.env.PUBLIC_SANITY_API_VERSION || "2026-07-27";
-
-const sanityClient = createClient({
-  projectId: sanityProjectId,
-  dataset: sanityDataset,
-  apiVersion: sanityApiVersion,
-  useCdn: false
-});
-
 let newsArticlesPromise: Promise<NewsArticle[]> | undefined;
-
-const newsQuery = `*[_type == "newsArticle" && defined(slug.current)] | order(publishedAt desc) {
-  _id,
-  translationKey,
-  language,
-  "slug": slug.current,
-  title,
-  excerpt,
-  body,
-  "cover": cover.asset->url,
-  coverAlt,
-  category,
-  author,
-  publishedAt,
-  updatedAt,
-  seoTitle,
-  seoDescription,
-  relatedCategories,
-  featured
-}`;
 
 type NewsLocalization = {
   language: Lang;
@@ -58,28 +25,7 @@ export type NewsArticle = {
   featured: boolean;
   localizations: Partial<Record<Lang, NewsLocalization>>;
 };
-
 export type NewsArticleView = Omit<NewsArticle, "localizations"> & NewsLocalization;
-
-type SanityNewsRecord = {
-  _id: string;
-  translationKey?: string;
-  language?: string;
-  slug?: string;
-  title?: string;
-  excerpt?: string;
-  body?: unknown[];
-  cover?: string;
-  coverAlt?: string;
-  category?: string;
-  author?: string;
-  publishedAt?: string;
-  updatedAt?: string;
-  seoTitle?: string;
-  seoDescription?: string;
-  relatedCategories?: string[];
-  featured?: boolean;
-};
 
 function escapeHtml(value: string) {
   return value.replace(/[&<>'"]/g, (character) => ({
@@ -95,79 +41,10 @@ function paragraphsToHtml(paragraphs: string[]) {
   return paragraphs.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("");
 }
 
-function portableTextToHtml(blocks: unknown[] | undefined) {
-  if (!blocks?.length) return "";
-
-  try {
-    return toHTML(blocks as Parameters<typeof toHTML>[0]);
-  } catch {
-    return "";
-  }
-}
-
-function asLang(value: string | undefined): Lang | undefined {
-  const supported: Lang[] = ["en", "es", "fr", "ja", "de", "pt", "ko", "ar"];
-  return supported.includes(value as Lang) ? (value as Lang) : undefined;
-}
-
-function asDate(value: string | undefined) {
-  return value || new Date().toISOString();
-}
-
-function createArticle(record: SanityNewsRecord): NewsArticle {
-  const language = asLang(record.language) || "en";
-  const title = record.title?.trim() || "WEGO Forklift News";
-  const excerpt = record.excerpt?.trim() || "Latest update from WEGO Forklift.";
-  const slug = record.slug?.trim() || record._id;
-
-  return {
-    key: record.translationKey?.trim() || record._id,
-    category: record.category?.trim() || "news",
-    author: record.author?.trim() || "WEGO Forklift",
-    publishedAt: asDate(record.publishedAt),
-    updatedAt: asDate(record.updatedAt || record.publishedAt),
-    cover: record.cover || "/images/home/wego-forklift-series-hero.jpg",
-    relatedCategories: record.relatedCategories || [],
-    featured: Boolean(record.featured),
-    localizations: {
-      [language]: {
-        language,
-        slug,
-        title,
-        excerpt,
-        seoTitle: record.seoTitle?.trim() || `${title} | WEGO Forklift`,
-        seoDescription: record.seoDescription?.trim() || excerpt,
-        bodyHtml: portableTextToHtml(record.body) || `<p>${escapeHtml(excerpt)}</p>`,
-        coverAlt: record.coverAlt?.trim() || title
-      }
-    }
-  };
-}
-
-function mergeArticles(records: SanityNewsRecord[]) {
-  const grouped = new Map<string, NewsArticle>();
-
-  for (const record of records) {
-    const article = createArticle(record);
-    const existing = grouped.get(article.key);
-    if (!existing) {
-      grouped.set(article.key, article);
-      continue;
-    }
-
-    Object.assign(existing.localizations, article.localizations);
-    existing.publishedAt = article.publishedAt < existing.publishedAt ? article.publishedAt : existing.publishedAt;
-    existing.updatedAt = article.updatedAt > existing.updatedAt ? article.updatedAt : existing.updatedAt;
-    if (article.cover && existing.cover.startsWith("/images/home/")) existing.cover = article.cover;
-  }
-
-  return [...grouped.values()].sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt));
-}
-
-async function getLegacyNews(): Promise<NewsArticle[]> {
+async function loadNewsArticles(): Promise<NewsArticle[]> {
   const legacyArticles = await getCollection("news");
 
-  return legacyArticles.map((entry) => ({
+  return legacyArticles.map<NewsArticle>((entry) => ({
     key: entry.data.translationKey,
     category: entry.data.category,
     author: entry.data.author,
@@ -258,18 +135,7 @@ async function getLegacyNews(): Promise<NewsArticle[]> {
         coverAlt: entry.data.title.ar
       }
     }
-  }));
-}
-
-async function loadNewsArticles() {
-  try {
-    const records = await sanityClient.fetch<SanityNewsRecord[]>(newsQuery);
-    if (records.length) return mergeArticles(records);
-  } catch (error) {
-    console.warn("Sanity news query failed; using local news fallback.", error);
-  }
-
-  return getLegacyNews();
+  })).sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt));
 }
 
 export function getNewsArticles() {
