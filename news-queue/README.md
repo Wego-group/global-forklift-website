@@ -20,12 +20,14 @@ Rules:
 7. The real page URL comes from `permalink`, not from the folder name.
 8. Every package must be written as people-first SEO content: one clear product/search topic, a practical lead paragraph, real application details, and no keyword stuffing.
 9. All eight languages in `title`, `excerpt`, `seoTitle`, `seoDescription`, and `body` must be genuinely localized. Do not copy the English text into the other language fields.
+10. The `body` field must always contain 5 paragraphs in every language, in this order: buyer-oriented overview, real application scene, key configuration points, pre-quotation checklist, and export or after-sales delivery notes.
+11. Two short paragraphs are not enough. News content must read like a usable buying brief, not a caption under a picture.
 
 Recommended workflow for the news operator:
 
 1. Create a new folder under `news-queue/` using the publish date as the folder name, for example `2026-08-08`.
 2. Put the text materials and images into that folder.
-3. Ask Codex to turn the materials into a valid `article.md` using the local template and to localize all eight language fields.
+3. Ask Codex to turn the materials into a valid `article.md` using the local template, to localize all eight language fields, and to expand the body into the fixed 5-paragraph SEO structure.
 4. Commit and push the folder to `main`. GitHub Actions will run in the cloud and release it automatically shortly after `22:00` Beijing time on that date, even if all local computers are off.
 
 Message to send to the Codex on the publishing computer:
@@ -42,7 +44,8 @@ Rule:
 6. publishedAt and updatedAt are generated automatically from the folder name. Do not require me to write them manually.
 7. Every news package must be polished for Google-friendly, people-first SEO before publishing.
 8. Every language field must be localized. Do not repeat the English copy in the non-English fields.
-9. Cloud publishing is handled by GitHub Actions after the folder is pushed to main. Do not depend on a local machine staying online until publish time.
+9. Every language inside `body` must contain exactly 5 useful paragraphs, not a short placeholder summary.
+10. Cloud publishing is handled by GitHub Actions after the folder is pushed to main. Do not depend on a local machine staying online until publish time.
 
 When I give you a folder in news-queue/, you must:
 1. Read the text and images in that folder.

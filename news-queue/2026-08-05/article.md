@@ -67,6 +67,16 @@ body:
       overload protection improve operator safety during busy shifts. WEGO
       offers 2 ton, 2.5 ton, and 3 ton lithium models so distributors and end
       users can match capacity to the real warehouse task.
+    - Why Choose a WEGO Lithium Electric Forklift for Indoor Warehouses fits
+      buyers who need cleaner indoor handling in warehouses, food factories,
+      retail distribution, and export projects where low noise and stable daily
+      uptime directly affect labor efficiency.
+    - Before quotation, most buyers confirm battery type, charger voltage,
+      running hours per shift, mast stage, lift height, side shifter options,
+      and turning radius so the truck matches aisle width and pallet flow.
+    - For export supply, WEGO can align spare-parts packing, manuals, charger
+      configuration, and destination-country operating details before shipment,
+      which makes installation and after-sales follow-up easier after arrival.
   es:
     - En almacenes interiores, las mayores ventajas de una carretilla electrica
       de litio suelen ser la rapidez de carga, el menor mantenimiento diario y
@@ -77,6 +87,19 @@ body:
       proteccion antideslizante y contra sobrecarga mejora la seguridad en
       turnos intensos. WEGO ofrece modelos de litio de 2, 2,5 y 3 toneladas para
       adaptar la capacidad al trabajo real del almacen.
+    - Por que elegir una carretilla electrica de litio WEGO para almacenes
+      interiores encaja en proyectos que necesitan manipulacion interior mas
+      limpia en almacenes, plantas alimentarias, distribucion minorista y
+      operaciones de exportacion donde el bajo ruido y la disponibilidad diaria
+      influyen directamente en la eficiencia.
+    - Antes de cotizar, la mayoria de los compradores confirma tipo de bateria,
+      voltaje del cargador, horas de trabajo por turno, etapa del mastil, altura
+      de elevacion, opciones de desplazador lateral y radio de giro para adaptar
+      el equipo al pasillo y al flujo de pales.
+    - Para suministro de exportacion, WEGO puede coordinar repuestos, manuales,
+      configuracion del cargador y detalles operativos del pais de destino antes
+      del embarque, lo que facilita la puesta en marcha y el seguimiento
+      posventa.
   fr:
     - Dans un entrepot interieur, les principaux atouts d'un chariot electrique
       lithium sont generalement la rapidite de charge, le faible entretien
@@ -87,9 +110,27 @@ body:
       protections antiderapage et surcharge ameliorent la securite pendant les
       periodes de pointe. WEGO propose des modeles lithium de 2, 2,5 et 3 tonnes
       pour adapter la capacite au travail reel de l'entrepot.
+    - Pourquoi choisir un chariot electrique lithium WEGO pour un entrepot
+      interieur convient aux acheteurs qui recherchent une manutention
+      interieure plus propre dans les entrepots, usines alimentaires, centres de
+      distribution et projets export ou le faible bruit et la disponibilite
+      quotidienne influencent directement l efficacite.
+    - Avant devis, la plupart des acheteurs confirment le type de batterie, la
+      tension du chargeur, les heures de travail par poste, le nombre d etages
+      du mat, la hauteur de levage, le deplacement lateral et le rayon de
+      braquage afin d adapter le chariot a l allee et au flux palettes.
+    - Pour les projets export, WEGO peut preparer les pieces d usure, les
+      manuels, la configuration du chargeur et les points d utilisation lies au
+      pays de destination avant expedition, ce qui simplifie la mise en service
+      et le suivi apres vente.
   ja:
     - 屋内仓库でリチウム电动フォークリフトを选ぶ主な理由は、一般に充电の速さ、日常保守の少なさ、そしてクリーンな运用です。WEGOのリチウムシリーズは、安定した搬送性能を保ちながら停止时间を减らしたいバイヤー向けに设计されています。
     - コンパクトな车体は狭い通路でも扱いやすく、滑り防止と过负荷保护は繁忙シフトでの安全性向上に役立ちます。WEGOでは2トン、2.5トン、3トンのリチウムモデルを用意し、实际の仓库作业に合わせて容量を选べます。
+    - 屋内仓库で WEGO リチウム电动フォークリフトを选ぶ理由
+      は、低騒音とクリーン搬送が重要な倉庫、食品工場、小売配送センター、輸出案件に適しており、日々の稼働安定性が現場効率に直結する買い手に向いています。
+    - 見積前には、バッテリー種類、充電器電圧、1シフト当たりの稼働時間、マスト段数、揚高、サイドシフター仕様、最小回転条件を確認し、通路幅とパレット動線に合う構成へ合わせ込むのが一般的です。
+    - 輸出案件では、WEGO
+      が消耗部品の同梱、取扱説明書、充電器仕様、仕向国の運用条件を出荷前に整理できるため、到着後の立ち上げとアフター対応を進めやすくなります。
   de:
     - In Innenlagern liegen die grossten Vorteile eines Lithium-Elektrostaplers
       meist in schneller Ladung, geringem Tageswartungsaufwand und sauberem
@@ -99,6 +140,19 @@ body:
       Uberlastschutz die Sicherheit in arbeitsintensiven Schichten erhohen. WEGO
       bietet Lithium-Modelle mit 2, 2,5 und 3 Tonnen, damit Handler und
       Endkunden die passende Tragfahigkeit wahlen konnen.
+    - Warum ein Lithium-Elektrostapler von WEGO fur Innenlager sinnvoll ist
+      passt zu Einkaufern, die in Lagern, Lebensmittelbetrieben,
+      Retail-Verteilung und Exportprojekten eine sauberere Innenlogistik
+      brauchen, bei der niedriger Gerauschpegel und stabile Tagesverfugbarkeit
+      die Arbeitseffizienz direkt beeinflussen.
+    - Vor dem Angebot werden meist Batterietyp, Ladegeraet-Spannung,
+      Betriebsstunden pro Schicht, Maststufe, Hubhohe, Seitenschieber und
+      Wendekreis abgestimmt, damit das Gerat zu Gangbreite und Palettenfluss
+      passt.
+    - Fur Exportauftrage kann WEGO Ersatzteile, Handbucher,
+      Ladegeraet-Konfiguration und betriebliche Anforderungen des Ziellandes vor
+      dem Versand abstimmen, wodurch Inbetriebnahme und
+      After-Sales-Unterstutzung nach Ankunft einfacher werden.
   pt:
     - Em armazens internos, as principais vantagens de uma empilhadeira eletrica
       de litio costumam ser a carga rapida, a baixa manutencao diaria e a
@@ -108,11 +162,30 @@ body:
       antiderrapante e contra sobrecarga aumenta a seguranca em turnos intensos.
       A WEGO oferece modelos de 2, 2,5 e 3 toneladas para ajustar a capacidade a
       tarefa real do armazem.
+    - Por que escolher uma empilhadeira eletrica de litio WEGO para armazens
+      internos atende compradores que precisam de movimentacao interna mais
+      limpa em armazens, fabricas de alimentos, distribuicao varejista e
+      projetos de exportacao nos quais baixo ruido e estabilidade diaria
+      influenciam diretamente a eficiencia operacional.
+    - Antes da cotacao, normalmente sao confirmados tipo de bateria, tensao do
+      carregador, horas de trabalho por turno, estagio do mastro, altura de
+      elevacao, deslocador lateral e raio de giro para ajustar o equipamento ao
+      corredor e ao fluxo de paletes.
+    - Em projetos de exportacao, a WEGO pode alinhar pecas de reposicao,
+      manuais, configuracao do carregador e exigencias operacionais do pais de
+      destino antes do embarque, o que facilita a entrada em operacao e o
+      acompanhamento pos-venda.
   ko:
     - 실내 창고에서 리튬 전동 지게차를 선택하는 가장 큰 이유는 빠른 충전, 낮은 일상 정비 부담, 더 깨끗한 작업 환경인 경우가
       많습니다. WEGO 리튬 라인은 안정적인 하역 성능을 유지하면서도 다운타임을 줄이고 싶은 구매자를 위해 설계되었습니다.
     - 컴팩트한 차체는 좁은 통로 작업에 유리하고, 미끄럼 방지 및 과부하 보호 기능은 바쁜 교대 시간의 안전성을 높여 줍니다. WEGO는
       2톤, 2.5톤, 3톤 리튬 모델을 제공해 실제 창고 작업에 맞는 용량을 선택할 수 있게 합니다.
+    - 실내 창고에 WEGO 리튬 전동 지게차를 선택해야 하는 이유 는 저소음과 청정 운반이 중요한 창고, 식품 공장, 유통 센터, 수출
+      프로젝트에 적합하며, 안정적인 일일 가동률이 작업 효율에 직접 영향을 주는 구매자에게 맞는 구성입니다.
+    - 견적 전에는 배터리 종류, 충전기 전압, 교대당 운전 시간, 마스트 단수, 인양 높이, 사이드시프터 옵션, 회전 반경을 먼저 확인해
+      통로 폭과 팔레트 흐름에 맞는 사양으로 정리하는 것이 일반적입니다.
+    - 수출 공급에서는 WEGO가 소모 부품 동봉, 매뉴얼, 충전기 규격, 도착 국가의 운용 조건을 출하 전에 맞출 수 있어 현지 설치와
+      사후 대응을 더 수월하게 진행할 수 있습니다.
   ar:
     - في المستودعات الداخلية، تتمثل اهم مزايا الرافعة الكهربائية ببطارية
       الليثيوم عادة في سرعة الشحن وانخفاض الصيانة اليومية ونظافة التشغيل. وقد تم
@@ -122,6 +195,16 @@ body:
       الانزلاق والحماية من الحمل الزائد على رفع مستوى السلامة اثناء الورديات
       المزدحمة. وتوفر WEGO طرازات ليثيوم بقدرات 2 طن و2.5 طن و3 اطنان لملاءمة
       العمل الفعلي داخل المستودع.
+    - لماذا تختار رافعة WEGO الكهربائية ببطارية ليثيوم للمستودعات الداخلية يناسب
+      المشترين الذين يحتاجون إلى مناولة داخلية انظف في المستودعات ومصانع الاغذية
+      ومراكز التوزيع ومشروعات التصدير حيث يؤثر انخفاض الضوضاء وثبات التشغيل
+      اليومي بشكل مباشر في كفاءة العمل.
+    - قبل عرض السعر يقوم معظم المشترين بتأكيد نوع البطارية وجهد الشاحن وساعات
+      التشغيل لكل وردية وعدد مراحل السارية وارتفاع الرفع وخيارات المزاح الجانبي
+      ونصف قطر الدوران حتى تتوافق الرافعة مع عرض الممر وتدفق الطبالي.
+    - وفي مشروعات التصدير تستطيع WEGO تنسيق قطع الغيار والادلة ومواصفات الشاحن
+      ومتطلبات التشغيل في بلد الوصول قبل الشحن، مما يسهل التشغيل الاولي
+      والمتابعة بعد البيع بعد وصول المعدة.
 relatedCategories:
   - lithium-electric-forklifts
   - electric-pallet-stackers
