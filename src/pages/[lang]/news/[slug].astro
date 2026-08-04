@@ -23,6 +23,89 @@ const article = findNewsArticle(await getNewsArticles(), lang, Astro.params.slug
 if (!article) return Astro.redirect(languagePath(lang, "/news/"));
 
 const relatedProducts = article.relatedCategories.flatMap((category) => getCategoryProducts(category)).slice(0, 3);
+const newsDetailText: Record<Lang, {
+  newsLabel: string;
+  relatedTitle: string;
+  relatedLead: string;
+  applicationTitle: string;
+  applicationBody: string;
+  inquiryTitle: string;
+  inquiryBody: string;
+}> = {
+  en: {
+    newsLabel: "News",
+    relatedTitle: "Related products",
+    relatedLead: "Use this article as a starting point, then confirm the exact forklift model, mast, attachment, and shipment target with WEGO before quotation.",
+    applicationTitle: "Application focus",
+    applicationBody: "This article is intended for buyers comparing working environment, turning space, lifting demand, and powertrain preference before final model selection.",
+    inquiryTitle: "Inquiry checklist",
+    inquiryBody: "For faster quotation, prepare capacity target, lift height, mast stage, tyre type, battery or engine preference, destination country, and expected order quantity."
+  },
+  es: {
+    newsLabel: "Noticias",
+    relatedTitle: "Productos relacionados",
+    relatedLead: "Utilice este articulo como punto de partida y confirme con WEGO el modelo exacto, mastil, implemento y destino del envio antes de la cotizacion.",
+    applicationTitle: "Enfoque de aplicacion",
+    applicationBody: "Este articulo esta pensado para compradores que comparan entorno de trabajo, espacio de giro, demanda de elevacion y tipo de potencia antes de elegir el modelo final.",
+    inquiryTitle: "Lista para la consulta",
+    inquiryBody: "Para recibir una cotizacion mas rapida, prepare capacidad requerida, altura de elevacion, etapa del mastil, tipo de neumatico, preferencia de bateria o motor, pais de destino y cantidad prevista."
+  },
+  fr: {
+    newsLabel: "Actualites",
+    relatedTitle: "Produits associes",
+    relatedLead: "Utilisez cet article comme point de depart, puis confirmez avec WEGO le modele exact, le mat, l'accessoire et la destination avant devis.",
+    applicationTitle: "Point d'application",
+    applicationBody: "Cet article aide les acheteurs a comparer l'environnement de travail, l'espace de braquage, le besoin de levage et la motorisation avant de valider le modele final.",
+    inquiryTitle: "Liste pour la demande",
+    inquiryBody: "Pour accelerer le devis, preparez la capacite cible, la hauteur de levage, le nombre d'etages du mat, le type de pneus, la preference batterie ou moteur, le pays de destination et la quantite prevue."
+  },
+  ja: {
+    newsLabel: "ニュース",
+    relatedTitle: "関連製品",
+    relatedLead: "この記事を出発点として活用し、正式見積の前に具体的な車種、マスト、アタッチメント、出荷先をWEGOと確認してください。",
+    applicationTitle: "適用ポイント",
+    applicationBody: "本記事は、作業環境、旋回スペース、揚高条件、動力方式を比較しながら最終機種を選定する購買担当者向けの内容です。",
+    inquiryTitle: "問い合わせ準備項目",
+    inquiryBody: "見積を早めるため、必要荷重、揚高、マスト段数、タイヤ種別、バッテリーまたはエンジン希望、仕向国、予定数量を事前に整理してください。"
+  },
+  de: {
+    newsLabel: "News",
+    relatedTitle: "Verwandte Produkte",
+    relatedLead: "Nutzen Sie diesen Beitrag als Ausgangspunkt und bestaetigen Sie vor dem Angebot das genaue Staplermodell, den Hubmast, den Anbaugeraetetyp und das Zielland mit WEGO.",
+    applicationTitle: "Einsatzschwerpunkt",
+    applicationBody: "Dieser Beitrag richtet sich an Einkaeufer, die Arbeitsumgebung, Wendeflaeche, Hubbedarf und Antriebsart vergleichen, bevor das Endmodell festgelegt wird.",
+    inquiryTitle: "Anfrage-Checkliste",
+    inquiryBody: "Fuer eine schnellere Angebotserstellung sollten Tragfaehigkeit, Hubhoehe, Maststufe, Reifenart, Batterie- oder Motorwunsch, Bestimmungsland und geplante Bestellmenge vorliegen."
+  },
+  pt: {
+    newsLabel: "Noticias",
+    relatedTitle: "Produtos relacionados",
+    relatedLead: "Use este artigo como ponto de partida e confirme com a WEGO o modelo exato, mastro, acessorio e destino do embarque antes da cotacao.",
+    applicationTitle: "Foco de aplicacao",
+    applicationBody: "Este artigo atende compradores que comparam ambiente de trabalho, area de manobra, demanda de elevacao e tipo de motorizacao antes de fechar o modelo final.",
+    inquiryTitle: "Checklist de consulta",
+    inquiryBody: "Para acelerar a cotacao, tenha definidos capacidade desejada, altura de elevacao, estagio do mastro, tipo de pneu, preferencia por bateria ou motor, pais de destino e quantidade prevista."
+  },
+  ko: {
+    newsLabel: "뉴스",
+    relatedTitle: "관련 제품",
+    relatedLead: "이 글을 출발점으로 활용하고, 정식 견적 전에는 구체적인 모델, 마스트, 어태치먼트, 선적 국가를 WEGO와 확인하세요.",
+    applicationTitle: "적용 포인트",
+    applicationBody: "이 글은 작업 환경, 회전 공간, 인양 조건, 동력 방식을 비교한 뒤 최종 모델을 선정하려는 구매 담당자를 위한 내용입니다.",
+    inquiryTitle: "문의 준비 항목",
+    inquiryBody: "더 빠른 견적을 위해 필요한 적재 용량, 인양 높이, 마스트 단수, 타이어 종류, 배터리 또는 엔진 선호, 도착 국가, 예상 수량을 미리 정리하세요."
+  },
+  ar: {
+    newsLabel: "الأخبار",
+    relatedTitle: "المنتجات المرتبطة",
+    relatedLead: "استخدم هذه المقالة كنقطة بداية ثم أكد مع WEGO الطراز المحدد والسارية والملحق ووجهة الشحن قبل طلب عرض السعر.",
+    applicationTitle: "محور الاستخدام",
+    applicationBody: "تخدم هذه المقالة المشترين الذين يقارنون بيئة التشغيل ومساحة الدوران واحتياج الرفع ونوع منظومة الدفع قبل اعتماد الطراز النهائي.",
+    inquiryTitle: "قائمة تجهيز الاستفسار",
+    inquiryBody: "لتسريع عرض السعر جهز الحمولة المطلوبة وارتفاع الرفع وعدد مراحل السارية ونوع الإطارات وتفضيل البطارية أو المحرك وبلد الوصول والكمية المتوقعة."
+  }
+};
+const ui = newsDetailText[lang];
 const breadcrumbs = [
   { name: "Home", url: languagePath(lang, "/") },
   { name: "News", url: languagePath(lang, "/news/") },
@@ -55,7 +138,7 @@ const articleSchema = {
     <header class="page-header">
       <div class="container">
         <Breadcrumbs items={[{ label: "Home", href: languagePath(lang, "/") }, { label: "News", href: languagePath(lang, "/news/") }, { label: article.title }]} />
-        <span class="eyebrow">News</span>
+        <span class="eyebrow">{ui.newsLabel}</span>
         <h1 class="section-title">{article.title}</h1>
         <p class="lead">{article.excerpt}</p>
         <p class="card-meta">{article.publishedAt.slice(0, 10)} | {article.author}</p>
@@ -63,17 +146,31 @@ const articleSchema = {
     </header>
 
     <section class="section">
-      <div class="container split">
-        <article class="prose">
-          <img src={article.cover} alt={article.coverAlt} width="1280" height="720" />
+      <div class="container news-article-layout">
+        <article class="prose news-article-main">
+          <img class="news-article-cover" src={article.cover} alt={article.coverAlt} width="1280" height="720" />
           <div set:html={article.bodyHtml} />
+          <div class="news-support-grid">
+            <section class="news-support-card">
+              <h2>{ui.applicationTitle}</h2>
+              <p>{ui.applicationBody}</p>
+            </section>
+            <section class="news-support-card">
+              <h2>{ui.inquiryTitle}</h2>
+              <p>{ui.inquiryBody}</p>
+            </section>
+          </div>
         </article>
-        <aside class="news-side">
-          <h2 class="section-title">Related products</h2>
-          <div class="grid">
+
+        <section class="news-related-block">
+          <div class="section-copy">
+            <h2 class="section-title">{ui.relatedTitle}</h2>
+            <p>{ui.relatedLead}</p>
+          </div>
+          <div class="grid three">
             {relatedProducts.map((product) => <ProductCard product={product} lang={lang} />)}
           </div>
-        </aside>
+        </section>
       </div>
     </section>
   </main>
