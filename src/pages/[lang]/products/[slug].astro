@@ -7,8 +7,9 @@ import SpecTable from "@components/SpecTable.astro";
 import { languages, type Lang } from "@data/languages";
 import { categories, getCategory, getCategoryProducts, getProduct, getProductName, products } from "@data/products";
 import { t } from "@data/i18n";
-import { languagePath } from "@lib/seo";
+import { absoluteUrl, languagePath } from "@lib/seo";
 import { breadcrumbSchema, productSchema } from "@lib/schema";
+import { getCategoryApplications } from "@data/product-category-ui";
 
 export function getStaticPaths() {
   return languages.flatMap((language) => [
@@ -46,89 +47,20 @@ const breadcrumbs = product
 const categoryProducts = category ? getCategoryProducts(category.slug) : [];
 const productCategory = product ? getCategory(product.category) : undefined;
 const related = product ? products.filter((item) => item.category === product.category && item.slug !== product.slug).slice(0, 3) : [];
-const categoryApplicationCopy: Record<string, Array<{ title: string; description: string }>> = {
-  "lithium-electric-forklifts": [
-    {
-      title: "Indoor warehouse operations",
-      description: "Battery power supports low-noise, zero local exhaust operation around racking, packing, and finished goods areas."
-    },
-    {
-      title: "Food and pharmaceutical storage",
-      description: "A cleaner powertrain is suited to controlled warehouses, cold-chain staging, and facilities with strict indoor air requirements."
-    },
-    {
-      title: "Production line supply",
-      description: "Responsive electric drive helps move components and finished products through frequent, repeatable factory handling cycles."
-    }
-  ],
-  "diesel-forklifts": [
-    {
-      title: "Outdoor loading yards",
-      description: "Diesel power is suitable for continuous trailer loading, unloading, and cargo transfer in open industrial yards."
-    },
-    {
-      title: "Factory and building materials",
-      description: "Multiple capacity and mast options support machinery, pallets, construction materials, and general industrial loads."
-    },
-    {
-      title: "Mixed-surface logistics",
-      description: "Pneumatic tire options and strong gradeability suit routes that move between warehouses, docks, and outdoor storage."
-    }
-  ],
-  "heavy-duty-forklifts": [
-    {
-      title: "Ports and terminals",
-      description: "High-capacity models support heavy cargo transfer, terminal yards, container-related work, and long outdoor duty cycles."
-    },
-    {
-      title: "Steel and metal handling",
-      description: "Robust chassis and large load centers are suited to coils, billets, fabricated structures, and dense industrial cargo."
-    },
-    {
-      title: "Heavy manufacturing",
-      description: "Seven to ten ton capacity supports machinery installation, plant logistics, molds, and oversized production materials."
-    }
-  ],
-  "rough-terrain-forklifts": [
-    {
-      title: "Construction sites",
-      description: "Higher ground clearance and outdoor tires help move blocks, timber, tools, and palletized materials across uneven sites."
-    },
-    {
-      title: "Agriculture and forestry",
-      description: "The 3.5T platform supports farm supplies, timber, feed, and seasonal cargo on unpaved working surfaces."
-    },
-    {
-      title: "Remote outdoor yards",
-      description: "A simple diesel configuration suits material handling where paved floors and indoor charging infrastructure are unavailable."
-    }
-  ],
-  "electric-pallet-stackers": [
-    {
-      title: "Narrow aisle stacking",
-      description: "The compact chassis supports pallet placement and retrieval where a counterbalance forklift would require too much space."
-    },
-    {
-      title: "Retail and distribution storage",
-      description: "Quiet battery operation is suitable for stock rooms, distribution centers, and frequent indoor replenishment tasks."
-    },
-    {
-      title: "Short-distance pallet movement",
-      description: "Walk-behind controls provide an efficient option for moving and lifting pallets between receiving, storage, and dispatch zones."
-    }
-  ]
-};
-const categoryApplications = category ? categoryApplicationCopy[category.slug] ?? [] : [];
+const categoryApplications = category ? getCategoryApplications(category.slug, lang) : [];
 const collectionSchema = category
   ? {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
       name: category.label[lang],
       description: category.summary[lang],
+      url: absoluteUrl(languagePath(lang, pagePath)),
+      inLanguage: lang,
+      image: absoluteUrl(category.image),
       hasPart: categoryProducts.map((item) => ({
         "@type": "Product",
         name: getProductName(item, lang),
-        url: languagePath(lang, `/products/${item.slug}/`)
+        url: absoluteUrl(languagePath(lang, `/products/${item.slug}/`))
       }))
     }
   : undefined;
@@ -143,7 +75,6 @@ const schema = product ? [productSchema(product, lang), breadcrumbSchema(breadcr
   image={pageImage}
   type={product ? "product" : "website"}
   schema={schema}
-  noindex={category && lang !== "en" ? true : undefined}
 >
   <main>
     {
@@ -158,7 +89,7 @@ const schema = product ? [productSchema(product, lang), breadcrumbSchema(breadcr
                   <p class="lead">{category.summary[lang]}</p>
                   <div class="meta-row">
                     <span class="pill">{category.capacityRange}</span>
-                    {category.powerTypes.map((type) => <span class="pill">{type}</span>)}
+                    {category.powerTypes.map((type) => <span class="pill">{type[lang]}</span>)}
                     <span class="pill">{t(lang, "currentProductRange")}</span>
                   </div>
                 </div>

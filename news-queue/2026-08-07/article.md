@@ -3,7 +3,7 @@ translationKey: wego-electric-forklift-green-low-carbon-logistics
 permalink: wego-electric-forklift-green-low-carbon-logistics
 category: product-guide
 author: WEGO Sales Team
-cover: ./cover.jpg
+cover: ./cover.webp
 title:
   en: WEGO Electric Forklift for Green Low-Carbon Logistics
   es: Carretilla electrica WEGO para logistica verde y baja en carbono

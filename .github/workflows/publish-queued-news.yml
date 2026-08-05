@@ -27,7 +27,9 @@ jobs:
         run: npm ci
 
       - name: Publish due queued news
-        run: npm run publish:queued-news
+        run: |
+          npm run validate:queued-news
+          npm run publish:queued-news
 
       - name: Commit and push published news
         run: |

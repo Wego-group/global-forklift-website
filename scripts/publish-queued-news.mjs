@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
+import sharp from "sharp";
 import YAML from "yaml";
 
 const projectRoot = process.cwd();
@@ -12,6 +13,11 @@ const publicNewsRoot = path.join(projectRoot, "public", "images", "news");
 const supportedLanguages = ["en", "es", "fr", "ja", "de", "pt", "ko", "ar"];
 const localizedKeys = ["title", "excerpt", "seoTitle", "seoDescription"];
 const fixedPublishTime = "22:00:00+08:00";
+const validateOnly = process.argv.includes("--validate-only");
+const categoryValues = new Set(["news", "events", "product-guide", "delivery-case", "technical-guide"]);
+const categorySlugs = new Set(["lithium-electric-forklifts", "diesel-forklifts", "heavy-duty-forklifts", "rough-terrain-forklifts", "electric-pallet-stackers"]);
+const latinLanguages = new Set(["en", "es", "fr", "de", "pt", "ar"]);
+const coverMaxBytes = 1_500_000;
 
 function parseFrontmatter(source) {
   const match = source.match(/^---\s*\n([\s\S]*?)\n---\s*(?:\n|$)/);
@@ -40,11 +46,43 @@ function ensureBody(value) {
   }
 
   for (const language of supportedLanguages) {
-    if (!Array.isArray(value[language]) || !value[language].length) {
-      throw new Error(`Field "body.${language}" must be a non-empty array.`);
+    if (!Array.isArray(value[language]) || value[language].length !== 5) {
+      throw new Error(`Field "body.${language}" must contain exactly 5 SEO paragraphs.`);
     }
     if (value[language].some((paragraph) => typeof paragraph !== "string" || !paragraph.trim())) {
       throw new Error(`Field "body.${language}" can only contain non-empty paragraphs.`);
+    }
+  }
+}
+
+function normalizeText(value) {
+  return value.toLowerCase().replace(/\s+/g, " ").trim();
+}
+
+function ensureSeoLengths(article) {
+  for (const language of supportedLanguages) {
+    const titleLength = article.seoTitle[language].trim().length;
+    const descriptionLength = article.seoDescription[language].trim().length;
+    const titleRange = latinLanguages.has(language) ? [30, 70] : [15, 45];
+    const descriptionRange = latinLanguages.has(language) ? [100, 180] : [45, 110];
+
+    if (titleLength < titleRange[0] || titleLength > titleRange[1]) {
+      throw new Error(`Field "seoTitle.${language}" must contain ${titleRange[0]}-${titleRange[1]} characters; received ${titleLength}.`);
+    }
+    if (descriptionLength < descriptionRange[0] || descriptionLength > descriptionRange[1]) {
+      throw new Error(`Field "seoDescription.${language}" must contain ${descriptionRange[0]}-${descriptionRange[1]} characters; received ${descriptionLength}.`);
+    }
+  }
+}
+
+function ensureGenuineLocalization(article) {
+  for (const field of [...localizedKeys, "body"]) {
+    const english = normalizeText(Array.isArray(article[field].en) ? article[field].en.join(" ") : article[field].en);
+    for (const language of supportedLanguages.filter((item) => item !== "en")) {
+      const localizedValue = normalizeText(Array.isArray(article[field][language]) ? article[field][language].join(" ") : article[field][language]);
+      if (localizedValue === english) {
+        throw new Error(`Field "${field}.${language}" duplicates the English content and must be genuinely localized.`);
+      }
     }
   }
 }
@@ -104,11 +142,39 @@ async function copyCoverIfNeeded(packageDir, permalink, coverValue) {
     throw new Error(`Cover file "${coverValue}" does not exist in the package folder.`);
   }
 
-  const extension = path.extname(source) || ".jpg";
-  const targetName = `${sanitizeFileSegment(permalink)}${extension.toLowerCase()}`;
+  const targetName = `${sanitizeFileSegment(permalink)}.webp`;
   const target = path.join(publicNewsRoot, targetName);
-  await fs.copyFile(source, target);
+  await sharp(source)
+    .rotate()
+    .resize({ width: 1920, height: 1440, fit: "inside", withoutEnlargement: true })
+    .webp({ quality: 82, effort: 5 })
+    .toFile(target);
+
+  const [metadata, outputStats] = await Promise.all([sharp(target).metadata(), fs.stat(target)]);
+  if (!metadata.width || metadata.width < 1200) {
+    throw new Error("Cover image must be at least 1200 pixels wide after optimization.");
+  }
+  if (outputStats.size > coverMaxBytes) {
+    throw new Error(`Optimized cover exceeds ${coverMaxBytes} bytes; use a simpler or cleaner source image.`);
+  }
   return `/images/news/${targetName}`;
+}
+
+async function validateCoverSource(packageDir, coverValue) {
+  if (typeof coverValue !== "string" || !coverValue.trim()) {
+    throw new Error('Field "cover" is required.');
+  }
+  if (!coverValue.startsWith("./")) return;
+
+  const source = path.join(packageDir, coverValue.slice(2));
+  const sourceStats = await fs.stat(source).catch(() => null);
+  if (!sourceStats?.isFile()) {
+    throw new Error(`Cover file "${coverValue}" does not exist in the package folder.`);
+  }
+  const metadata = await sharp(source).metadata();
+  if (!metadata.width || metadata.width < 1200) {
+    throw new Error("Cover image must be at least 1200 pixels wide.");
+  }
 }
 
 async function publishPackage(packageName) {
@@ -128,8 +194,11 @@ async function publishPackage(packageName) {
   if (typeof article.permalink !== "string" || !article.permalink.trim()) {
     throw new Error('Field "permalink" is required.');
   }
-  if (typeof article.category !== "string" || !article.category.trim()) {
-    throw new Error('Field "category" is required.');
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(article.permalink)) {
+    throw new Error('Field "permalink" must be a lowercase, hyphen-separated slug.');
+  }
+  if (!categoryValues.has(article.category)) {
+    throw new Error('Field "category" is not an allowed news category.');
   }
   if (typeof article.author !== "string" || !article.author.trim()) {
     throw new Error('Field "author" is required.');
@@ -139,6 +208,14 @@ async function publishPackage(packageName) {
     ensureLocalizedField(article[key], key);
   }
   ensureBody(article.body);
+  ensureSeoLengths(article);
+  ensureGenuineLocalization(article);
+  article.relatedCategories = Array.isArray(article.relatedCategories) ? article.relatedCategories : [];
+  if (!article.relatedCategories.length || article.relatedCategories.some((category) => !categorySlugs.has(category))) {
+    throw new Error('Field "relatedCategories" must contain at least one valid WEGO product category.');
+  }
+  await validateCoverSource(packageDir, article.cover);
+  if (validateOnly) return { status: "validated" };
 
   const publishAt = publishDateFromFolderName(packageName);
   if (publishAt.getTime() > Date.now()) {
@@ -147,7 +224,6 @@ async function publishPackage(packageName) {
 
   article.publishedAt = publishAt.toISOString();
   article.updatedAt = publishAt.toISOString();
-  article.relatedCategories = Array.isArray(article.relatedCategories) ? article.relatedCategories : [];
   article.featured = Boolean(article.featured);
   article.cover = await copyCoverIfNeeded(packageDir, article.permalink, article.cover);
 
@@ -170,11 +246,17 @@ async function main() {
   let publishedCount = 0;
   let pendingCount = 0;
   let failedCount = 0;
+  let validatedCount = 0;
 
   for (const packageName of packageNames) {
     const packageDir = path.join(queueRoot, packageName);
     try {
       const result = await publishPackage(packageName);
+      if (result.status === "validated") {
+        validatedCount += 1;
+        console.log(`Validated: ${packageName}`);
+        continue;
+      }
       if (result.status === "pending") {
         pendingCount += 1;
         console.log(`Pending: ${packageName}`);
@@ -186,13 +268,16 @@ async function main() {
     } catch (error) {
       failedCount += 1;
       const message = error instanceof Error ? error.message : String(error);
-      await fs.writeFile(path.join(packageDir, "publish-error.log"), `${message}\n`, "utf8");
-      await moveDirectory(packageDir, failedRoot, packageName);
+      if (!validateOnly) {
+        await fs.writeFile(path.join(packageDir, "publish-error.log"), `${message}\n`, "utf8");
+        await moveDirectory(packageDir, failedRoot, packageName);
+      }
       console.error(`Failed: ${packageName} -> ${message}`);
     }
   }
 
-  console.log(`Summary: published=${publishedCount} pending=${pendingCount} failed=${failedCount}`);
+  console.log(`Summary: validated=${validatedCount} published=${publishedCount} pending=${pendingCount} failed=${failedCount}`);
+  if (validateOnly && failedCount) process.exitCode = 1;
 }
 
 main().catch((error) => {

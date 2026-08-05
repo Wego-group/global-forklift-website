@@ -22,6 +22,11 @@ Rules:
 9. All eight languages in `title`, `excerpt`, `seoTitle`, `seoDescription`, and `body` must be genuinely localized. Do not copy the English text into the other language fields.
 10. The `body` field must always contain 5 paragraphs in every language, in this order: buyer-oriented overview, real application scene, key configuration points, pre-quotation checklist, and export or after-sales delivery notes.
 11. Two short paragraphs are not enough. News content must read like a usable buying brief, not a caption under a picture.
+12. `seoTitle` is validated per language: 30-70 characters for Latin/Arabic languages and 15-45 for Japanese/Korean. `seoDescription` must be 100-180 or 45-110 characters respectively.
+13. Every article must link to at least one valid WEGO product family through `relatedCategories` so the news page contributes useful internal links.
+14. The cloud publisher rejects non-English fields that simply duplicate English. Visible titles, summaries, descriptions, and all five body paragraphs must be genuinely localized.
+15. Cover images must be at least 1200 pixels wide. The cloud publisher automatically rotates, resizes to a maximum of 1920x1440, strips unnecessary metadata, and publishes WebP at controlled quality.
+16. Published NewsArticle structured data automatically includes an absolute image URL, language, publication and modification dates, canonical page, WEGO publisher URL, and publisher logo.
 
 Recommended workflow for the news operator:
 
@@ -46,6 +51,9 @@ Rule:
 8. Every language field must be localized. Do not repeat the English copy in the non-English fields.
 9. Every language inside `body` must contain exactly 5 useful paragraphs, not a short placeholder summary.
 10. Cloud publishing is handled by GitHub Actions after the folder is pushed to main. Do not depend on a local machine staying online until publish time.
+11. Keep every SEO title and description inside the language-aware length rules documented above.
+12. Use a real cover image at least 1200 pixels wide and at least one valid related product category. The publisher will optimize the image to WebP automatically.
+13. Before pushing, run `npm run validate:queued-news`. Correct every reported error; never bypass the validator.
 
 When I give you a folder in news-queue/, you must:
 1. Read the text and images in that folder.

@@ -49,6 +49,8 @@ npm run preview
 15. 新闻内容必须按 Google 搜索的“以用户为先”逻辑撰写：标题聚焦一个明确产品/场景关键词，首段直接回答买家问题，正文写真实应用、配置、采购确认和交付信息，避免关键词堆砌。
 16. 电脑关机也能按时发布：GitHub Actions 会在每天北京时间 `22:05` 自动执行 `npm run publish:queued-news`，然后自动提交并推送到 `main`。
 17. 业务侧电脑只负责把 `news-queue/日期文件夹` 和素材推到 GitHub，不再承担到点发布动作。
+18. 入队前必须运行 `npm run validate:queued-news`。系统会强制检查 8 语种完整性、5 段正文、SEO 标题与描述长度、永久链接、关联产品分类和封面尺寸。
+19. 发布时封面会自动转为 WebP，限制在 1920x1440 内并控制文件体积；新闻结构化数据会自动加入绝对图片地址、语言、日期、规范页面和 WEGO 发布机构 Logo。
 
 ## 低成本部署建议
 
@@ -63,6 +65,7 @@ npm run preview
 ## 新闻自动发布
 
 ```bash
+npm run validate:queued-news
 npm run publish:queued-news
 ```
 
@@ -75,5 +78,7 @@ npm run publish:queued-news
 - 成功后写入 `src/content/news/`，同时把新闻包移动到 `news-published/`
 - 校验失败则移动到 `news-failed/`
 - 文章在入队前就应完成 SEO 打磨和多语言本地化，而不是发布后再补
+- 云端工作流先执行强制 SEO 校验，全部通过后才允许发布
+- 上传的 JPG、PNG 或 WebP 封面都会在发布时统一生成轻量 WebP，不把原始大图直接放到线上页面
 
 给另一台发布电脑上的 Codex 的固定指令，已经写在 [news-queue/README.md](/Users/mike_cheng/Desktop/global-forklift-website/news-queue/README.md)。

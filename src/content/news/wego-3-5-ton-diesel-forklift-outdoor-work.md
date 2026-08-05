@@ -3,7 +3,7 @@ translationKey: wego-3-5-ton-diesel-forklift-outdoor-work
 permalink: wego-3-5-ton-diesel-forklift-outdoor-work
 category: technical-guide
 author: WEGO Sales Team
-cover: /images/news/wego-3-5-ton-diesel-forklift-outdoor-work.jpg
+cover: /images/news/wego-3-5-ton-diesel-forklift-outdoor-work.webp
 title:
   en: WEGO 3.5 Ton Diesel Forklift for Port and Yard Work
   es: Carretilla elevadora diesel WEGO de 3,5 toneladas para puertos y patios

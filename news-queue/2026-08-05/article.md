@@ -3,7 +3,7 @@ translationKey: why-choose-wego-lithium-electric-forklift
 permalink: why-choose-wego-lithium-electric-forklift
 category: product-guide
 author: WEGO Sales Team
-cover: ./cover.jpg
+cover: ./cover.webp
 title:
   en: Why Choose a WEGO Lithium Electric Forklift for Indoor Warehouses
   es: Por que elegir una carretilla electrica de litio WEGO para almacenes

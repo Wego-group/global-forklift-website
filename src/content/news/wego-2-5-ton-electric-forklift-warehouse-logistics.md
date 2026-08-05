@@ -3,7 +3,7 @@ translationKey: wego-2-5-ton-electric-forklift-warehouse-logistics
 permalink: wego-2-5-ton-electric-forklift-warehouse-logistics
 category: product-guide
 author: WEGO Sales Team
-cover: /images/news/wego-2-5-ton-electric-forklift-warehouse-logistics.jpg
+cover: /images/news/wego-2-5-ton-electric-forklift-warehouse-logistics.webp
 title:
   en: WEGO 2.5 Ton Electric Forklift for Warehouse Logistics
   es: Carretilla elevadora electrica WEGO de 2,5 toneladas para logistica de

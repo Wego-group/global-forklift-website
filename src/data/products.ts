@@ -21,7 +21,7 @@ export type ProductCategory = {
   summary: Record<Lang, string>;
   image: string;
   capacityRange: string;
-  powerTypes: string[];
+  powerTypes: LocalizedText[];
   status?: "catalog" | "planned";
 };
 
@@ -196,7 +196,10 @@ export const categories: ProductCategory[] = [
     }),
     image: "/images/products/lithium-25t/01.webp",
     capacityRange: "2.5T-3.5T",
-    powerTypes: ["Lithium battery", "Electric"],
+    powerTypes: [
+      translated({ en: "Lithium battery", es: "Bateria de litio", fr: "Batterie lithium", ja: "リチウムバッテリー", de: "Lithiumbatterie", pt: "Bateria de litio", ko: "리튬 배터리", ar: "بطارية ليثيوم" }),
+      translated({ en: "Electric", es: "Electrico", fr: "Electrique", ja: "電動", de: "Elektrisch", pt: "Eletrica", ko: "전동", ar: "كهربائية" })
+    ],
     status: "catalog"
   },
   {
@@ -223,7 +226,7 @@ export const categories: ProductCategory[] = [
     }),
     image: "/images/products/diesel-35t-2-stage/01.webp",
     capacityRange: "2.5T-5.0T",
-    powerTypes: ["Diesel"],
+    powerTypes: [translated({ en: "Diesel", es: "Diesel", fr: "Diesel", ja: "ディーゼル", de: "Diesel", pt: "Diesel", ko: "디젤", ar: "ديزل" })],
     status: "catalog"
   },
   {
@@ -250,7 +253,7 @@ export const categories: ProductCategory[] = [
     }),
     image: "/images/products/heavy-duty-100t/01.webp",
     capacityRange: "7.0T-10.0T",
-    powerTypes: ["Diesel"],
+    powerTypes: [translated({ en: "Diesel", es: "Diesel", fr: "Diesel", ja: "ディーゼル", de: "Diesel", pt: "Diesel", ko: "디젤", ar: "ديزل" })],
     status: "catalog"
   },
   {
@@ -277,7 +280,7 @@ export const categories: ProductCategory[] = [
     }),
     image: "/images/products/rough-terrain-35t/01.webp",
     capacityRange: "3.5T",
-    powerTypes: ["Diesel"],
+    powerTypes: [translated({ en: "Diesel", es: "Diesel", fr: "Diesel", ja: "ディーゼル", de: "Diesel", pt: "Diesel", ko: "디젤", ar: "ديزل" })],
     status: "catalog"
   },
   {
@@ -304,7 +307,7 @@ export const categories: ProductCategory[] = [
     }),
     image: "/images/products/electric-pallet-stacker/01.webp",
     capacityRange: "Model based",
-    powerTypes: ["Battery"],
+    powerTypes: [translated({ en: "Battery", es: "Bateria", fr: "Batterie", ja: "バッテリー", de: "Batterie", pt: "Bateria", ko: "배터리", ar: "بطارية" })],
     status: "catalog"
   }
 ];

@@ -12,7 +12,9 @@ export default defineConfig({
     sitemap({
       filter: (page) => {
         const pathname = new URL(page).pathname;
-        return pathname !== "/" && !pathname.startsWith("/admin/");
+        const legacyRoute = /\/(?:parts-service|why-wego|resources|industries)(?:\/|$)/.test(pathname)
+          || /\/services\/$/.test(pathname);
+        return pathname !== "/" && !pathname.startsWith("/admin/") && !legacyRoute;
       }
     })
   ],

@@ -3,7 +3,7 @@ translationKey: wego-diesel-forklift-series-heavy-load-capacity
 permalink: wego-diesel-forklift-series-heavy-load-capacity
 category: product-guide
 author: WEGO Sales Team
-cover: ./cover.jpg
+cover: ./cover.webp
 title:
   en: WEGO Diesel Forklift Range for Heavy Cargo Handling
   es: Gama de carretillas diesel WEGO para manipulacion de carga pesada

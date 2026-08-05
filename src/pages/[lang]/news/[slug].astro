@@ -4,8 +4,9 @@ import Breadcrumbs from "@components/Breadcrumbs.astro";
 import ProductCard from "@components/ProductCard.astro";
 import { languages, type Lang } from "@data/languages";
 import { getCategoryProducts } from "@data/products";
-import { languagePath } from "@lib/seo";
+import { absoluteUrl, languagePath } from "@lib/seo";
 import { breadcrumbSchema } from "@lib/schema";
+import { siteConfig } from "@data/site";
 import { findNewsArticle, getNewsArticles, getNewsForLanguage } from "@lib/news";
 
 export async function getStaticPaths() {
@@ -117,11 +118,19 @@ const articleSchema = {
   "@type": "NewsArticle",
   headline: article.title,
   description: article.seoDescription,
+  inLanguage: lang,
+  articleSection: article.category,
+  mainEntityOfPage: absoluteUrl(languagePath(lang, `/news/${article.slug}/`)),
   datePublished: article.publishedAt,
   dateModified: article.updatedAt,
-  image: article.cover,
-  author: { "@type": "Organization", name: article.author },
-  publisher: { "@type": "Organization", name: "WEGO Forklift" }
+  image: absoluteUrl(article.cover),
+  author: { "@type": "Organization", name: article.author, url: absoluteUrl("/en/about/") },
+  publisher: {
+    "@type": "Organization",
+    name: siteConfig.brand,
+    url: siteConfig.baseUrl,
+    logo: { "@type": "ImageObject", url: absoluteUrl(siteConfig.logo) }
+  }
 };
 ---
 

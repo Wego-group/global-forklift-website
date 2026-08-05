@@ -3,7 +3,7 @@ translationKey: wego-walkie-stacker-ride-on-warehouse-solutions
 permalink: wego-walkie-stacker-ride-on-warehouse-solutions
 category: product-guide
 author: WEGO Sales Team
-cover: ./cover.jpg
+cover: ./cover.webp
 title:
   en: WEGO Walkie Stackers and Ride-on Forklifts for Warehouses
   es: Apiladores electricos de acompanante y carretillas con operador WEGO para
