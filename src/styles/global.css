@@ -824,7 +824,7 @@ main {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
-  margin-top: 34px;
+  margin-top: 18px;
 }
 
 .news-support-card {
@@ -834,7 +834,7 @@ main {
   padding: 22px;
 }
 
-.news-support-card h2 {
+.news-support-card h3 {
   margin: 0 0 10px;
   font-size: 1.16rem;
 }

@@ -27,6 +27,9 @@ Rules:
 14. The cloud publisher rejects non-English fields that simply duplicate English. Visible titles, summaries, descriptions, and all five body paragraphs must be genuinely localized.
 15. Cover images must be at least 1200 pixels wide. The cloud publisher automatically rotates, resizes to a maximum of 1920x1440, strips unnecessary metadata, and publishes WebP at controlled quality.
 16. Published NewsArticle structured data automatically includes an absolute image URL, language, publication and modification dates, canonical page, WEGO publisher URL, and publisher logo.
+17. Research may use reputable forklift manufacturers and industry sources to identify buyer questions, but never copy their wording, brand claims, or model-specific figures. Write an original WEGO buying brief and only state WEGO specifications that are supported by WEGO product data.
+18. Do not reuse more than two complete body paragraphs from another queued article. Each language must meet the minimum information-density check and every paragraph must contribute a distinct decision point.
+19. The article page automatically adds a localized technical buyer checklist selected by `translationKey`; keep the key accurate so the checklist matches the product and operating scene.
 
 Recommended workflow for the news operator:
 
@@ -54,6 +57,8 @@ Rule:
 11. Keep every SEO title and description inside the language-aware length rules documented above.
 12. Use a real cover image at least 1200 pixels wide and at least one valid related product category. The publisher will optimize the image to WebP automatically.
 13. Before pushing, run `npm run validate:queued-news`. Correct every reported error; never bypass the validator.
+14. Competitor research is for topic coverage only. Never copy competitor prose or transfer competitor specifications to WEGO. Use verified WEGO data and clearly mark configuration-dependent details for quotation.
+15. Make the five paragraphs specific to this article. Cover load, site, duty cycle, power or fuel, attachments, maintenance, compliance, or delivery as relevant; do not recycle generic endings from earlier articles.
 
 When I give you a folder in news-queue/, you must:
 1. Read the text and images in that folder.

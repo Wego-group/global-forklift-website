@@ -18,6 +18,7 @@ const categoryValues = new Set(["news", "events", "product-guide", "delivery-cas
 const categorySlugs = new Set(["lithium-electric-forklifts", "diesel-forklifts", "heavy-duty-forklifts", "rough-terrain-forklifts", "electric-pallet-stackers"]);
 const latinLanguages = new Set(["en", "es", "fr", "de", "pt", "ar"]);
 const coverMaxBytes = 1_500_000;
+const validatedArticleBodies = [];
 
 function parseFrontmatter(source) {
   const match = source.match(/^---\s*\n([\s\S]*?)\n---\s*(?:\n|$)/);
@@ -52,6 +53,15 @@ function ensureBody(value) {
     if (value[language].some((paragraph) => typeof paragraph !== "string" || !paragraph.trim())) {
       throw new Error(`Field "body.${language}" can only contain non-empty paragraphs.`);
     }
+    const normalizedParagraphs = value[language].map(normalizeText);
+    if (new Set(normalizedParagraphs).size !== normalizedParagraphs.length) {
+      throw new Error(`Field "body.${language}" contains repeated paragraphs.`);
+    }
+    const totalCharacters = normalizedParagraphs.join(" ").length;
+    const minimumCharacters = ["ja", "ko"].includes(language) ? 320 : 650;
+    if (totalCharacters < minimumCharacters) {
+      throw new Error(`Field "body.${language}" is too thin; provide practical, topic-specific buyer information.`);
+    }
   }
 }
 
@@ -85,6 +95,22 @@ function ensureGenuineLocalization(article) {
       }
     }
   }
+}
+
+function ensureCrossArticleDiversity(article, articleName) {
+  for (const previous of validatedArticleBodies) {
+    for (const language of supportedLanguages) {
+      const currentParagraphs = new Set(article.body[language].map(normalizeText));
+      const sharedParagraphs = previous.body[language].filter((paragraph) => currentParagraphs.has(paragraph)).length;
+      if (sharedParagraphs > 2) {
+        throw new Error(`Field "body.${language}" shares ${sharedParagraphs} full paragraphs with "${previous.name}"; rewrite the article around its own buyer intent.`);
+      }
+    }
+  }
+  validatedArticleBodies.push({
+    name: articleName,
+    body: Object.fromEntries(supportedLanguages.map((language) => [language, article.body[language].map(normalizeText)]))
+  });
 }
 
 function sanitizeFileSegment(value) {
@@ -210,6 +236,7 @@ async function publishPackage(packageName) {
   ensureBody(article.body);
   ensureSeoLengths(article);
   ensureGenuineLocalization(article);
+  ensureCrossArticleDiversity(article, packageName);
   article.relatedCategories = Array.isArray(article.relatedCategories) ? article.relatedCategories : [];
   if (!article.relatedCategories.length || article.relatedCategories.some((category) => !categorySlugs.has(category))) {
     throw new Error('Field "relatedCategories" must contain at least one valid WEGO product category.');
