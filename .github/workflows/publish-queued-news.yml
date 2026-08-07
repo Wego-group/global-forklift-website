@@ -2,7 +2,12 @@ name: Publish Queued News
 
 on:
   schedule:
-    - cron: "5 14 * * *"
+    # Primary release check at 22:17 Beijing time, followed by cloud-runner retries.
+    # The publisher is idempotent and only commits packages whose fixed release time has passed.
+    - cron: "17 14 * * *"
+    - cron: "17 15 * * *"
+    - cron: "17 17 * * *"
+    - cron: "17 21 * * *"
   workflow_dispatch:
 
 permissions:
