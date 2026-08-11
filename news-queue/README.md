@@ -14,7 +14,7 @@ Rules:
 1. `article.md` must use the same frontmatter schema as files in `src/content/news/`.
 2. If the cover image lives inside the package folder, set `cover: ./cover.jpg`.
 3. The folder name is the publish date and must be exactly `YYYY-MM-DD`.
-4. All queued news uses the same fixed publish time: Beijing time `22:00:00+08:00`. GitHub starts checking at `22:17` and retries later if a hosted runner is temporarily unavailable.
+4. All queued news uses the same fixed publish time: Beijing time `22:00:00+08:00`. GitHub starts checking at `22:05` and retries later if a hosted runner is temporarily unavailable.
 5. `article.md` no longer needs `publishedAt` or `updatedAt`. The publisher writes both automatically from the folder date.
 6. The auto publisher ignores future packages, publishes due packages, moves success cases to `news-published/`, and moves invalid packages to `news-failed/`.
 7. The real page URL comes from `permalink`, not from the folder name.
@@ -66,3 +66,4 @@ When I give you a folder in news-queue/, you must:
 3. Commit and push to main.
 4. If I explicitly ask for an immediate manual release, then run npm run publish:queued-news, commit, and push the generated changes.
 ```
+
