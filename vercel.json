@@ -4,14 +4,6 @@
   "framework": "astro",
   "redirects": [
     {
-      "source": "/:path*",
-      "has": [
-        { "type": "host", "value": "www.wegoforklift.com" }
-      ],
-      "destination": "https://wegoforklift.com/:path",
-      "permanent": true
-    },
-    {
       "source": "/",
       "destination": "/en/",
       "permanent": true
