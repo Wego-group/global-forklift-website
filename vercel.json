@@ -76,11 +76,5 @@
         { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
       ]
     }
-  ],
-  "crons": [
-    {
-      "path": "/api/daily-traffic-report",
-      "schedule": "0 1 * * *"
-    }
   ]
 }
