@@ -24,7 +24,7 @@ const {
 } = Astro.props;
 ---
 
-<form class="lead-form" data-lead-form data-email={siteConfig.email} data-success={t(lang, "formSuccess")} data-error={t(lang, "formError")} action="/.netlify/functions/lead" method="post">
+<form class="lead-form" data-lead-form data-email={siteConfig.email} data-success={t(lang, "formSuccess")} data-error={t(lang, "formError")} action="/api/lead" method="post">
   <input type="hidden" name="language" value={lang} />
   <input type="hidden" name="source_path" value={Astro.url.pathname} />
   <input type="hidden" name="inquiry_type" value={inquiryType} />
