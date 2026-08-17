@@ -3,7 +3,7 @@ translationKey: wego-3-ton-diesel-forklift-freight-yard
 permalink: wego-3-ton-diesel-forklift-freight-yard
 category: technical-guide
 author: WEGO Sales Team
-cover: ./cover.webp
+cover: /images/news/wego-3-ton-diesel-forklift-freight-yard.webp
 title:
   en: WEGO 3 Ton Diesel Forklift for Freight Yard Operations
   es: Carretilla diesel WEGO de 3 toneladas para operaciones en patios de carga
@@ -206,4 +206,6 @@ relatedCategories:
   - diesel-forklifts
   - rough-terrain-forklifts
 featured: true
+publishedAt: 2026-08-08T14:00:00.000Z
+updatedAt: 2026-08-08T14:00:00.000Z
 ---

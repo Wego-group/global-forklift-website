@@ -83,9 +83,11 @@ const schema = [organizationSchema(), websiteSchema(lang)];
           {
             latestNews.map((article) => (
               <article class="card news-card">
-                <a class="card-media" href={languagePath(lang, `/news/${article.slug}/`)}>
-                  <img src={article.cover} alt={article.coverAlt} width="1280" height="720" loading="lazy" />
-                </a>
+                {article.cover && (
+                  <a class="card-media" href={languagePath(lang, `/news/${article.slug}/`)}>
+                    <img src={article.cover} alt={article.coverAlt} width="1280" height="720" loading="lazy" />
+                  </a>
+                )}
                 <div class="card-body">
                   <p class="card-meta">{article.publishedAt.slice(0, 10)}</p>
                   <h3><a href={languagePath(lang, `/news/${article.slug}/`)}>{article.title}</a></h3>

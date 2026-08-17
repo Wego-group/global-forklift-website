@@ -1,7 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
-import sharp from "sharp";
 import YAML from "yaml";
 
 const projectRoot = process.cwd();
@@ -16,9 +15,9 @@ const fixedPublishTime = "22:00:00+08:00";
 const validateOnly = process.argv.includes("--validate-only");
 const categoryValues = new Set(["news", "events", "product-guide", "delivery-case", "technical-guide"]);
 const categorySlugs = new Set(["lithium-electric-forklifts", "diesel-forklifts", "heavy-duty-forklifts", "rough-terrain-forklifts", "electric-pallet-stackers"]);
-const latinLanguages = new Set(["en", "es", "fr", "de", "pt", "ar"]);
 const coverMaxBytes = 1_500_000;
 const validatedArticleBodies = [];
+let sharpPromise;
 
 function parseFrontmatter(source) {
   const match = source.match(/^---\s*\n([\s\S]*?)\n---\s*(?:\n|$)/);
@@ -31,37 +30,33 @@ function parseFrontmatter(source) {
 
 function ensureLocalizedField(value, fieldName) {
   if (!value || typeof value !== "object") {
-    throw new Error(`Field "${fieldName}" must contain all language entries.`);
+    throw new Error(`Field "${fieldName}" must contain at least an English entry.`);
   }
 
-  for (const language of supportedLanguages) {
-    if (typeof value[language] !== "string" || !value[language].trim()) {
-      throw new Error(`Field "${fieldName}.${language}" is required.`);
-    }
+  if (typeof value.en !== "string" || !value.en.trim()) {
+    throw new Error(`Field "${fieldName}.en" is required.`);
   }
 }
 
 function ensureBody(value) {
   if (!value || typeof value !== "object") {
-    throw new Error('Field "body" must contain all language entries.');
+    throw new Error('Field "body" must contain at least an English entry.');
   }
 
-  for (const language of supportedLanguages) {
-    if (!Array.isArray(value[language]) || value[language].length !== 5) {
-      throw new Error(`Field "body.${language}" must contain exactly 5 SEO paragraphs.`);
-    }
-    if (value[language].some((paragraph) => typeof paragraph !== "string" || !paragraph.trim())) {
-      throw new Error(`Field "body.${language}" can only contain non-empty paragraphs.`);
-    }
-    const normalizedParagraphs = value[language].map(normalizeText);
-    if (new Set(normalizedParagraphs).size !== normalizedParagraphs.length) {
-      throw new Error(`Field "body.${language}" contains repeated paragraphs.`);
-    }
-    const totalCharacters = normalizedParagraphs.join(" ").length;
-    const minimumCharacters = ["ja", "ko"].includes(language) ? 320 : 650;
-    if (totalCharacters < minimumCharacters) {
-      throw new Error(`Field "body.${language}" is too thin; provide practical, topic-specific buyer information.`);
-    }
+  if (!Array.isArray(value.en) || value.en.length !== 5) {
+    throw new Error('Field "body.en" must contain exactly 5 SEO paragraphs.');
+  }
+  if (value.en.some((paragraph) => typeof paragraph !== "string" || !paragraph.trim())) {
+    throw new Error('Field "body.en" can only contain non-empty paragraphs.');
+  }
+
+  const normalizedParagraphs = value.en.map(normalizeText);
+  if (new Set(normalizedParagraphs).size !== normalizedParagraphs.length) {
+    throw new Error('Field "body.en" contains repeated paragraphs.');
+  }
+
+  if (normalizedParagraphs.join(" ").length < 650) {
+    throw new Error('Field "body.en" is too thin; provide practical, topic-specific buyer information.');
   }
 }
 
@@ -70,31 +65,45 @@ function normalizeText(value) {
 }
 
 function ensureSeoLengths(article) {
-  for (const language of supportedLanguages) {
-    const titleLength = article.seoTitle[language].trim().length;
-    const descriptionLength = article.seoDescription[language].trim().length;
-    const titleRange = latinLanguages.has(language) ? [30, 70] : [15, 45];
-    const descriptionRange = latinLanguages.has(language) ? [100, 180] : [45, 110];
+  const titleLength = article.seoTitle.en.trim().length;
+  const descriptionLength = article.seoDescription.en.trim().length;
 
-    if (titleLength < titleRange[0] || titleLength > titleRange[1]) {
-      throw new Error(`Field "seoTitle.${language}" must contain ${titleRange[0]}-${titleRange[1]} characters; received ${titleLength}.`);
-    }
-    if (descriptionLength < descriptionRange[0] || descriptionLength > descriptionRange[1]) {
-      throw new Error(`Field "seoDescription.${language}" must contain ${descriptionRange[0]}-${descriptionRange[1]} characters; received ${descriptionLength}.`);
-    }
+  if (titleLength < 30 || titleLength > 70) {
+    throw new Error(`Field "seoTitle.en" must contain 30-70 characters; received ${titleLength}.`);
+  }
+  if (descriptionLength < 100 || descriptionLength > 180) {
+    throw new Error(`Field "seoDescription.en" must contain 100-180 characters; received ${descriptionLength}.`);
   }
 }
 
-function ensureGenuineLocalization(article) {
-  for (const field of [...localizedKeys, "body"]) {
-    const english = normalizeText(Array.isArray(article[field].en) ? article[field].en.join(" ") : article[field].en);
-    for (const language of supportedLanguages.filter((item) => item !== "en")) {
-      const localizedValue = normalizeText(Array.isArray(article[field][language]) ? article[field][language].join(" ") : article[field][language]);
-      if (localizedValue === english) {
-        throw new Error(`Field "${field}.${language}" duplicates the English content and must be genuinely localized.`);
-      }
-    }
-  }
+function fillLocalizedString(value) {
+  const english = value.en.trim();
+  return Object.fromEntries(
+    supportedLanguages.map((language) => [language, typeof value[language] === "string" && value[language].trim() ? value[language].trim() : english])
+  );
+}
+
+function fillLocalizedBody(value) {
+  const english = value.en.map((paragraph) => paragraph.trim());
+  return Object.fromEntries(
+    supportedLanguages.map((language) => {
+      const paragraphs = Array.isArray(value[language]) && value[language].length
+        ? value[language].map((paragraph) => String(paragraph).trim()).filter(Boolean)
+        : english;
+      return [language, paragraphs];
+    })
+  );
+}
+
+function expandArticle(article) {
+  return {
+    ...article,
+    title: fillLocalizedString(article.title),
+    excerpt: fillLocalizedString(article.excerpt),
+    seoTitle: fillLocalizedString(article.seoTitle),
+    seoDescription: fillLocalizedString(article.seoDescription),
+    body: fillLocalizedBody(article.body)
+  };
 }
 
 function ensureCrossArticleDiversity(article, articleName) {
@@ -115,6 +124,11 @@ function ensureCrossArticleDiversity(article, articleName) {
 
 function sanitizeFileSegment(value) {
   return value.toLowerCase().replace(/[^a-z0-9.-]+/g, "-").replace(/^-+|-+$/g, "");
+}
+
+async function loadSharp() {
+  sharpPromise ||= import("sharp").then((module) => module.default);
+  return sharpPromise;
 }
 
 function publishDateFromFolderName(packageName) {
@@ -154,9 +168,7 @@ async function moveDirectory(source, targetRoot, name) {
 }
 
 async function copyCoverIfNeeded(packageDir, permalink, coverValue) {
-  if (typeof coverValue !== "string" || !coverValue.trim()) {
-    throw new Error('Field "cover" is required.');
-  }
+  if (typeof coverValue !== "string" || !coverValue.trim()) return "";
 
   if (!coverValue.startsWith("./")) {
     return coverValue;
@@ -170,6 +182,7 @@ async function copyCoverIfNeeded(packageDir, permalink, coverValue) {
 
   const targetName = `${sanitizeFileSegment(permalink)}.webp`;
   const target = path.join(publicNewsRoot, targetName);
+  const sharp = await loadSharp();
   await sharp(source)
     .rotate()
     .resize({ width: 1920, height: 1440, fit: "inside", withoutEnlargement: true })
@@ -187,9 +200,7 @@ async function copyCoverIfNeeded(packageDir, permalink, coverValue) {
 }
 
 async function validateCoverSource(packageDir, coverValue) {
-  if (typeof coverValue !== "string" || !coverValue.trim()) {
-    throw new Error('Field "cover" is required.');
-  }
+  if (typeof coverValue !== "string" || !coverValue.trim()) return;
   if (!coverValue.startsWith("./")) return;
 
   const source = path.join(packageDir, coverValue.slice(2));
@@ -197,6 +208,7 @@ async function validateCoverSource(packageDir, coverValue) {
   if (!sourceStats?.isFile()) {
     throw new Error(`Cover file "${coverValue}" does not exist in the package folder.`);
   }
+  const sharp = await loadSharp();
   const metadata = await sharp(source).metadata();
   if (!metadata.width || metadata.width < 1200) {
     throw new Error("Cover image must be at least 1200 pixels wide.");
@@ -235,8 +247,8 @@ async function publishPackage(packageName) {
   }
   ensureBody(article.body);
   ensureSeoLengths(article);
-  ensureGenuineLocalization(article);
-  ensureCrossArticleDiversity(article, packageName);
+  const expandedArticle = expandArticle(article);
+  ensureCrossArticleDiversity(expandedArticle, packageName);
   article.relatedCategories = Array.isArray(article.relatedCategories) ? article.relatedCategories : [];
   if (!article.relatedCategories.length || article.relatedCategories.some((category) => !categorySlugs.has(category))) {
     throw new Error('Field "relatedCategories" must contain at least one valid WEGO product category.');
@@ -249,16 +261,20 @@ async function publishPackage(packageName) {
     return { status: "pending" };
   }
 
-  article.publishedAt = publishAt.toISOString();
-  article.updatedAt = publishAt.toISOString();
-  article.featured = Boolean(article.featured);
-  article.cover = await copyCoverIfNeeded(packageDir, article.permalink, article.cover);
+  const publishedArticle = {
+    ...expandedArticle,
+    relatedCategories: article.relatedCategories,
+    featured: Boolean(article.featured),
+    publishedAt: publishAt.toISOString(),
+    updatedAt: publishAt.toISOString(),
+    cover: await copyCoverIfNeeded(packageDir, article.permalink, article.cover)
+  };
 
-  const output = `---\n${YAML.stringify(article).trimEnd()}\n---\n`;
-  const target = path.join(contentRoot, `${article.permalink}.md`);
+  const output = `---\n${YAML.stringify(publishedArticle).trimEnd()}\n---\n`;
+  const target = path.join(contentRoot, `${publishedArticle.permalink}.md`);
   await fs.writeFile(target, output, "utf8");
   await moveDirectory(packageDir, publishedRoot, packageName);
-  return { status: "published", permalink: article.permalink };
+  return { status: "published", permalink: publishedArticle.permalink };
 }
 
 async function main() {

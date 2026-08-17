@@ -82,6 +82,7 @@ const newsDetailText: Record<Lang, {
   }
 };
 const ui = newsDetailText[lang];
+const articleImage = article.cover || undefined;
 const breadcrumbs = [
   { name: "Home", url: languagePath(lang, "/") },
   { name: "News", url: languagePath(lang, "/news/") },
@@ -98,7 +99,7 @@ const articleSchema = {
   mainEntityOfPage: absoluteUrl(languagePath(lang, `/news/${article.slug}/`)),
   datePublished: article.publishedAt,
   dateModified: article.updatedAt,
-  image: absoluteUrl(article.cover),
+  ...(articleImage ? { image: absoluteUrl(articleImage) } : {}),
   author: { "@type": "Organization", name: article.author, url: absoluteUrl("/en/about/") },
   publisher: {
     "@type": "Organization",
@@ -115,7 +116,7 @@ const articleSchema = {
   description={article.seoDescription}
   path={`/news/${article.slug}/`}
   type="article"
-  image={article.cover}
+  image={articleImage}
   schema={[breadcrumbSchema(breadcrumbs), articleSchema]}
 >
   <main>
@@ -132,7 +133,7 @@ const articleSchema = {
     <section class="section">
       <div class="container news-article-layout">
         <article class="prose news-article-main">
-          <img class="news-article-cover" src={article.cover} alt={article.coverAlt} width="1280" height="720" />
+          {articleImage && <img class="news-article-cover" src={articleImage} alt={article.coverAlt} width="1280" height="720" />}
           <div set:html={article.bodyHtml} />
           <h2>{ui.technicalTitle}</h2>
           <div class="news-support-grid">

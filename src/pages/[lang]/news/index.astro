@@ -27,9 +27,11 @@ const articles = getNewsForLanguage(await getNewsArticles(), lang);
           {
             articles.map((article) => (
               <article class="news-row">
-                <a class="news-row-media" href={languagePath(lang, `/news/${article.slug}/`)}>
-                  <img src={article.cover} alt={article.coverAlt} width="960" height="540" loading="lazy" />
-                </a>
+                {article.cover && (
+                  <a class="news-row-media" href={languagePath(lang, `/news/${article.slug}/`)}>
+                    <img src={article.cover} alt={article.coverAlt} width="960" height="540" loading="lazy" />
+                  </a>
+                )}
                 <div class="news-row-body">
                   <p class="card-meta">{article.publishedAt.slice(0, 10)}</p>
                   <h2><a href={languagePath(lang, `/news/${article.slug}/`)}>{article.title}</a></h2>
