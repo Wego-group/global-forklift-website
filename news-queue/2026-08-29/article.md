@@ -1,26 +1,26 @@
 ---
-translationKey: wego-forklift-fleet-standardization
-permalink: forklift-total-cost-of-ownership-guide
+translationKey: wego-reach-truck-narrow-aisle-warehouse
+permalink: reach-trucks-for-narrow-aisle-warehouse-storage
 category: technical-guide
 author: WEGO Sales Team
 cover: ""
 title:
-  en: Forklift Total Cost of Ownership Guide | WEGO
+  en: Reach Trucks for Narrow-Aisle Warehouse Storage
 excerpt:
-  en: Total cost of ownership compares purchase, energy, maintenance, downtime, training, tyres, utilization, and replacement instead of price alone.
+  en: Reach trucks can support higher storage density when the truck, rack layout, pallet dimensions, lift height, and residual capacity are planned together.
 seoTitle:
-  en: Forklift Total Cost of Ownership Guide | WEGO
+  en: Reach Trucks for Narrow-Aisle Warehouses | WEGO
 seoDescription:
-  en: Compare forklift purchase, energy, maintenance, tyres, training, downtime, utilization, and replacement costs with this practical TCO guide.
+  en: Compare reach truck lift height, residual capacity, aisle width, battery, visibility, and rack requirements before a narrow-aisle project.
 body:
   en:
-    - The lowest purchase price is not always the lowest-cost forklift solution. Total cost of ownership gives buyers a clearer view of energy, maintenance, tyres, training, downtime, utilization, service, and eventual replacement.
-    - A warehouse running electric trucks across several shifts will measure cost differently from an outdoor yard using diesel or LPG. Load, travel distance, floor condition, operating hours, energy prices, and service access all change the annual result.
-    - Build the comparison around rated capacity, battery or fuel system, charger, duty cycle, maintenance intervals, tyre wear, attachments, operator comfort, availability, and expected equipment life. Include the cost of a truck that is unavailable during a peak period.
-    - Before quotation, provide annual hours, average and maximum loads, shifts, route length, energy prices, service rates, spare-parts expectations, utilization, downtime history, and replacement horizon. Use the same assumptions for every power type being compared.
-    - For export projects, confirm warranty scope, service response, spare parts, training, documentation, charger or fuel requirements, and resale or replacement support. WEGO can help build an application-based fleet comparison rather than a price-only decision.
+    - Reach trucks are designed for warehouse buyers who want to use vertical storage while maintaining control in narrower aisles. The correct choice depends on the rack system and operating scene, not on lift height alone.
+    - In retail distribution, e-commerce, cold storage, or manufacturing, operators may place pallets at high rack positions and return them during scheduled picking cycles. Smooth floor quality, turning space, rack clearances, and pallet consistency all affect practical productivity.
+    - Confirm maximum lift height, residual capacity at height, aisle width, reach stroke, mast visibility, battery capacity, tyre choice, fork length, and operator position. The rack beam, pallet dimensions, load center, and emergency access should be checked with the truck specification.
+    - Before quotation, provide a rack drawing, pallet size, load weight, highest storage level, aisle measurement, floor condition, shift schedule, charging plan, and any cold-room or ramp exposure. Include whether the truck must also work in staging or loading areas.
+    - For export delivery, confirm racking compatibility, charger standards, manuals, training, spare parts, and commissioning support. WEGO can help match a reach truck or complementary warehouse equipment to the real storage layout and service plan.
 relatedCategories:
+  - electric-pallet-stackers
   - lithium-electric-forklifts
-  - diesel-forklifts
 featured: false
 ---
