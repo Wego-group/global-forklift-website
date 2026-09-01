@@ -1,19 +1,33 @@
-const MAX_BODY_BYTES = 4096;
-
-async function parseBody(request) {
-  const raw = await request.text();
-  if (Buffer.byteLength(raw, "utf8") > MAX_BODY_BYTES) return null;
-
-  const contentType = request.headers.get("content-type") || "";
-  if (contentType.includes("application/json")) return JSON.parse(raw);
-  return Object.fromEntries(new URLSearchParams(raw).entries());
-}
+import { chinaDate, clean, parsePageviewBody, recordTraffic, trafficStoreConfigured } from "../_lib/traffic.js";
 
 export async function POST(request) {
-  const payload = await parseBody(request);
-  if (!payload || typeof payload !== "object") {
-    return new Response(null, { status: 400 });
+  const payload = await parsePageviewBody(request);
+  const path = clean(payload?.path, 500);
+  const visitorId = clean(payload?.visitor_id, 80);
+  if (!payload || typeof payload !== "object" || !path.startsWith("/") || path.startsWith("/admin/") || !visitorId) {
+    return new Response(null, { status: 204 });
   }
 
-  return new Response(null, { status: 204 });
+  if (!trafficStoreConfigured()) {
+    console.error("Traffic store is not configured");
+    return new Response(null, { status: 503 });
+  }
+
+  await recordTraffic(chinaDate(), {
+    path,
+    visitor_id: visitorId,
+    language: clean(payload.language, 12) || "Unknown",
+    country: clean(request.headers.get("x-vercel-ip-country") || request.headers.get("x-country-code") || "Unknown", 100),
+    referrer: clean(payload.referrer, 200),
+    recorded_at: new Date().toISOString()
+  });
+
+  return new Response(null, {
+    status: 204,
+    headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow" }
+  });
+}
+
+export function GET() {
+    return new Response(null, { status: 400 });
 }

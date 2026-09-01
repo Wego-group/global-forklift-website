@@ -2,6 +2,12 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "framework": "astro",
+  "crons": [
+    {
+      "path": "/api/daily-traffic-report",
+      "schedule": "10 1 * * *"
+    }
+  ],
   "redirects": [
     {
       "source": "/",
